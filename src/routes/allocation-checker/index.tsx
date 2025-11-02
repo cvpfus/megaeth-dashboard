@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useUserAuctionHistory } from "@/hooks/useAuctionHistory";
 import { useState } from "react";
+import { Navigation } from "@/components/navigation";
 import {
   Card,
   CardContent,
@@ -21,6 +22,7 @@ import {
 
 export const Route = createFileRoute("/allocation-checker/")({
   component: RouteComponent,
+  ssr: "data-only",
 });
 
 function RouteComponent() {
@@ -73,24 +75,7 @@ function RouteComponent() {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900">
       {/* Navigation */}
-      <nav className="bg-slate-900 border-b border-slate-700/50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-6">
-            <Link
-              to="/"
-              className="text-gray-400 hover:text-cyan-300 font-medium transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/allocation-checker"
-              className="text-cyan-400 font-medium transition-colors"
-            >
-              Allocation Checker
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Header */}
       <section className="relative py-12 px-6 border-b border-slate-700/50">
@@ -132,7 +117,7 @@ function RouteComponent() {
                   placeholder="0x..."
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                   className="pl-4 bg-slate-900 border-slate-600 text-gray-300 placeholder:text-gray-500 focus:border-cyan-500"
                 />
               </div>
@@ -187,8 +172,7 @@ function RouteComponent() {
                       {lastBid ? (
                         <div>
                           <p className="text-3xl font-bold text-cyan-400">
-                            {formatNumber(Number(lastBid.amount))}{" "}
-                            USDT
+                            {formatNumber(Number(lastBid.amount))} USDT
                           </p>
                           <p className="text-sm text-gray-500">
                             Last bid amount
@@ -248,10 +232,10 @@ function RouteComponent() {
                       </div>
                       <div>
                         <CardTitle className="text-white text-xl">
-                          Refunds
+                          Refunded Amount
                         </CardTitle>
                         <CardDescription className="text-gray-400">
-                          Refunded amounts
+                          Your refunded amount
                         </CardDescription>
                       </div>
                     </div>
@@ -300,38 +284,48 @@ function RouteComponent() {
                             </div>
                             <div className="text-sm">
                               <div className="text-gray-400">Status</div>
-                              <Badge
-                                variant={
-                                  auction.status === "Allocated"
-                                    ? "default"
-                                    : auction.status ===
-                                          "CancelledAndRefunded" ||
-                                        auction.status ===
-                                          "PartiallyRefunded" ||
-                                        auction.status === "Refunded"
-                                      ? "secondary"
-                                      : "outline"
-                                }
-                                className={
-                                  auction.status === "Allocated"
-                                    ? "bg-green-500/20 text-green-400 border-green-500/50"
-                                    : auction.status ===
-                                          "CancelledAndRefunded" ||
-                                        auction.status ===
-                                          "PartiallyRefunded" ||
-                                        auction.status === "Refunded"
-                                      ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
-                                      : "bg-blue-500/20 text-blue-400 border-blue-500/50"
-                                }
-                              >
-                                {auction.status === "CancelledAndRefunded"
-                                  ? "Cancelled & Refunded"
-                                  : auction.status === "PartiallyRefunded"
-                                    ? "Partially Refunded"
-                                    : auction.status
-                                        .replace(/([A-Z])/g, " $1")
-                                        .trim()}
-                              </Badge>
+                              <div className="flex items-center gap-2">
+                                <Badge
+                                  variant={
+                                    auction.status === "Allocated"
+                                      ? "default"
+                                      : auction.status ===
+                                            "CancelledAndRefunded" ||
+                                          auction.status ===
+                                            "PartiallyRefunded" ||
+                                          auction.status === "Refunded"
+                                        ? "secondary"
+                                        : "outline"
+                                  }
+                                  className={
+                                    auction.status === "Allocated"
+                                      ? "bg-green-500/20 text-green-400 border-green-500/50"
+                                      : auction.status ===
+                                            "CancelledAndRefunded" ||
+                                          auction.status ===
+                                            "PartiallyRefunded" ||
+                                          auction.status === "Refunded"
+                                        ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
+                                        : "bg-blue-500/20 text-blue-400 border-blue-500/50"
+                                  }
+                                >
+                                  {auction.status === "CancelledAndRefunded"
+                                    ? "Cancelled & Refunded"
+                                    : auction.status === "PartiallyRefunded"
+                                      ? "Partially Refunded"
+                                      : auction.status
+                                          .replace(/([A-Z])/g, " $1")
+                                          .trim()}
+                                </Badge>
+                                {auction.status === "Bidding" && (
+                                  <Badge
+                                    variant="outline"
+                                    className="bg-orange-500/20 text-orange-400 border-orange-500/50 text-xs"
+                                  >
+                                    Lockup: {auction.lockup ? "Yes" : "No"}
+                                  </Badge>
+                                )}
+                              </div>
                             </div>
                           </div>
                           <div className="text-right text-sm">

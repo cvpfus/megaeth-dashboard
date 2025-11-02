@@ -1,7 +1,8 @@
 import { useSaleStats } from "@/hooks/useSaleStats";
 import { useAuctionHistory } from "@/hooks/useAuctionHistory";
-import { createFileRoute, Link, useLocation } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Order_By } from "@/gql/graphql";
+import { Navigation } from "@/components/navigation";
 import {
   Card,
   CardContent,
@@ -56,7 +57,6 @@ const Status = {
 } as const;
 
 function App() {
-  const location = useLocation();
   const { data, loading, error, refetch: refetchStats } = useSaleStats();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageChanging, setIsPageChanging] = useState(false);
@@ -324,32 +324,7 @@ function App() {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900">
       {/* Navigation */}
-      <nav className="bg-slate-900 border-b border-slate-700/50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-6">
-            <Link
-              to="/"
-              className={`font-medium transition-colors ${
-                location.pathname === "/"
-                  ? "text-cyan-400"
-                  : "text-gray-400 hover:text-cyan-300"
-              }`}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/allocation-checker"
-              className={`font-medium transition-colors ${
-                location.pathname === "/allocation-checker"
-                  ? "text-cyan-400"
-                  : "text-gray-400 hover:text-cyan-300"
-              }`}
-            >
-              Allocation Checker
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Header */}
       <section className="relative py-12 px-6 border-b border-slate-700/50">
