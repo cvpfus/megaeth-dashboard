@@ -15,8 +15,8 @@ const GET_AUCTION_HISTORY = graphql(`
   }
 `);
 
-export function useAuctionHistory() {
+export function useAuctionHistory(limit = 10, offset = 0) {
   return useQuery(GET_AUCTION_HISTORY, {
-    variables: { limit: 10, offset: 0 },
+    variables: { limit, offset },
   });
 }
