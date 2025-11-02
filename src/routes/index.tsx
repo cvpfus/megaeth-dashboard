@@ -1,6 +1,7 @@
 import { useSaleStats } from "@/hooks/useSaleStats";
 import { useAuctionHistory } from "@/hooks/useAuctionHistory";
 import { createFileRoute } from "@tanstack/react-router";
+import { Order_By } from "@/gql/graphql";
 import {
   Card,
   CardContent,
@@ -27,32 +28,56 @@ import {
   Activity,
   ChevronLeft,
   ChevronRight,
+  Loader2,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/")({ component: App });
 
-enum Status {
-  Bidding = "Bidding",
-  CancelledAndRefunded = "CancelledAndRefunded",
-  PartiallyRefunded = "PartiallyRefunded",
-  Refunded = "Refunded",
-  Allocated = "Allocated",
-}
+const Status = {
+  Bidding: "Bidding",
+  CancelledAndRefunded: "CancelledAndRefunded",
+  PartiallyRefunded: "PartiallyRefunded",
+  Refunded: "Refunded",
+  Allocated: "Allocated",
+} as const;
 
 function App() {
   const { data, loading, error } = useSaleStats();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageChanging, setIsPageChanging] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
   const itemsPerPage = 10;
+
+  // Build orderBy object based on sort state
+  const orderBy = useMemo(() => {
+    if (sortOrder === "asc") {
+      return { amount: Order_By.Asc };
+    }
+    if (sortOrder === "desc") {
+      return { amount: Order_By.Desc };
+    }
+    return { id: Order_By.Desc };
+  }, [sortOrder]);
 
   const {
     data: auctionData,
     loading: auctionLoading,
     error: auctionError,
-  } = useAuctionHistory(itemsPerPage, (currentPage - 1) * itemsPerPage);
+    previousData: previousAuctionData,
+  } = useAuctionHistory(
+    itemsPerPage,
+    (currentPage - 1) * itemsPerPage,
+    orderBy
+  );
 
   const stats = data?.SaleStats?.[0];
-  const auctionHistory = auctionData?.AuctionHistory || [];
+  // Use previous data while loading to prevent flickering
+  const auctionHistory =
+    auctionData?.AuctionHistory || previousAuctionData?.AuctionHistory || [];
 
   const formatNumber = (num: number | undefined) => {
     if (num === undefined) return "0";
@@ -194,15 +219,34 @@ function App() {
     );
   };
 
+  const toggleSort = () => {
+    if (sortOrder === null) {
+      setSortOrder("desc");
+    } else if (sortOrder === "desc") {
+      setSortOrder("asc");
+    } else {
+      setSortOrder(null);
+    }
+  };
+
   const handlePreviousPage = () => {
+    setIsPageChanging(true);
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
   const handleNextPage = () => {
     if (auctionHistory.length === itemsPerPage) {
+      setIsPageChanging(true);
       setCurrentPage((prev) => prev + 1);
     }
   };
+
+  // Reset page changing state when data loads
+  useEffect(() => {
+    if (!auctionLoading && isPageChanging) {
+      setIsPageChanging(false);
+    }
+  }, [auctionLoading, isPageChanging]);
 
   if (loading) {
     return (
@@ -480,8 +524,9 @@ function App() {
             </div>
           </CardHeader>
           <CardContent>
-            {auctionLoading ? (
-              <div className="text-center py-8 text-gray-400">
+            {auctionLoading && !previousAuctionData ? (
+              <div className="text-center py-8 text-gray-400 flex items-center justify-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
                 Loading auction history...
               </div>
             ) : auctionError ? (
@@ -494,7 +539,16 @@ function App() {
               </div>
             ) : (
               <>
-                <div className="rounded-lg border border-slate-700 overflow-hidden">
+                <div className="relative rounded-lg border border-slate-700 overflow-hidden">
+                  {/* Loading overlay for pagination */}
+                  {auctionLoading && (
+                    <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                      <div className="flex items-center gap-2 text-cyan-400 bg-slate-800 px-4 py-2 rounded-lg border border-cyan-500/30 shadow-lg">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm font-medium">Loading...</span>
+                      </div>
+                    </div>
+                  )}
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-slate-800/80 hover:bg-slate-800/80">
@@ -502,7 +556,21 @@ function App() {
                           Address
                         </TableHead>
                         <TableHead className="text-gray-300 font-semibold">
-                          Amount
+                          <button
+                            onClick={toggleSort}
+                            className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer"
+                          >
+                            <span>Amount (USDT)</span>
+                            {sortOrder === null && (
+                              <ArrowUpDown className="w-4 h-4 text-gray-500" />
+                            )}
+                            {sortOrder === "asc" && (
+                              <ArrowUp className="w-4 h-4 text-cyan-400" />
+                            )}
+                            {sortOrder === "desc" && (
+                              <ArrowDown className="w-4 h-4 text-cyan-400" />
+                            )}
+                          </button>
                         </TableHead>
                         <TableHead className="text-gray-300 font-semibold">
                           Status
@@ -527,16 +595,30 @@ function App() {
                             </code>
                           </TableCell>
                           <TableCell className="text-gray-300 font-semibold">
-                            {formatNumber(auction.amount)} USDT
+                            <div className="flex items-center gap-2">
+                              <img
+                                src="https://tether.to/images/logoCircle.svg"
+                                alt="USDT"
+                                className="w-5 h-5"
+                              />
+                              <span>{formatNumber(auction.amount)}</span>
+                            </div>
                           </TableCell>
                           <TableCell>
                             {getStatusBadge(auction.status)}
                           </TableCell>
                           <TableCell className="text-gray-300">
                             {auction.txHash ? (
-                              <code className="px-2 py-1 bg-slate-900/50 rounded text-purple-400 text-xs">
-                                {formatAddress(auction.txHash)}
-                              </code>
+                              <a
+                                href={`https://etherscan.io/tx/${auction.txHash}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block"
+                              >
+                                <code className="px-2 py-1 bg-slate-900/50 rounded text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 text-xs transition-colors cursor-pointer border border-transparent hover:border-purple-500/30">
+                                  {formatAddress(auction.txHash)}
+                                </code>
+                              </a>
                             ) : (
                               <span className="text-gray-500">-</span>
                             )}
@@ -554,13 +636,16 @@ function App() {
                 <div className="flex items-center justify-between mt-6">
                   <div className="text-sm text-gray-400">
                     Page {currentPage}
+                    {auctionLoading && (
+                      <span className="ml-2 text-cyan-400">(Loading...)</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handlePreviousPage}
-                      disabled={currentPage === 1}
+                      disabled={currentPage === 1 || auctionLoading}
                       className="bg-slate-800/50 border-slate-600 text-gray-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="w-4 h-4 mr-1" />
@@ -570,7 +655,9 @@ function App() {
                       variant="outline"
                       size="sm"
                       onClick={handleNextPage}
-                      disabled={auctionHistory.length < itemsPerPage}
+                      disabled={
+                        auctionHistory.length < itemsPerPage || auctionLoading
+                      }
                       className="bg-slate-800/50 border-slate-600 text-gray-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Next

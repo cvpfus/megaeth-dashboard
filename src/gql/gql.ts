@@ -14,11 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query getAuctionHistory($limit: Int, $offset: Int) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: { id: desc }) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": typeof types.GetAuctionHistoryDocument,
+    "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n  ) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: $orderBy) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": typeof types.GetAuctionHistoryDocument,
     "\n  query getSaleStats($id: String!) {\n    SaleStats(where: { id: { _eq: $id } }) {\n      id\n      totalBids\n      totalBidsUSDT\n      totalCancellations\n      totalCancellationsUSDT\n      totalFullRefundedUSDT\n      totalFullRefunds\n      totalWinners\n      totalPartialRefundedUSDT\n      totalPartialRefunds\n      totalRefundedUSDT\n      totalRefunds\n    }\n  }\n": typeof types.GetSaleStatsDocument,
 };
 const documents: Documents = {
-    "\n  query getAuctionHistory($limit: Int, $offset: Int) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: { id: desc }) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": types.GetAuctionHistoryDocument,
+    "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n  ) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: $orderBy) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": types.GetAuctionHistoryDocument,
     "\n  query getSaleStats($id: String!) {\n    SaleStats(where: { id: { _eq: $id } }) {\n      id\n      totalBids\n      totalBidsUSDT\n      totalCancellations\n      totalCancellationsUSDT\n      totalFullRefundedUSDT\n      totalFullRefunds\n      totalWinners\n      totalPartialRefundedUSDT\n      totalPartialRefunds\n      totalRefundedUSDT\n      totalRefunds\n    }\n  }\n": types.GetSaleStatsDocument,
 };
 
@@ -39,7 +39,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query getAuctionHistory($limit: Int, $offset: Int) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: { id: desc }) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"): (typeof documents)["\n  query getAuctionHistory($limit: Int, $offset: Int) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: { id: desc }) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"];
+export function graphql(source: "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n  ) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: $orderBy) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"): (typeof documents)["\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n  ) {\n    AuctionHistory(limit: $limit, offset: $offset, order_by: $orderBy) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
