@@ -148,6 +148,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             plugins={[TanStackQueryDevtools]}
           />
         )}
+        <script
+          async
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+        ></script>
         <Scripts />
       </body>
     </html>
