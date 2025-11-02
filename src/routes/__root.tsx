@@ -27,17 +27,17 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+        title: "MegaETH Dashboard - Auction Analytics & Allocation Checker",
       },
       {
         name: "description",
         content:
-          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+          "Track MegaETH auction statistics, check allocation status, and monitor bidding activity in real-time.",
       },
       {
         name: "keywords",
         content:
-          "MegaEth, auction, dashboard, allocation checker, blockchain, cryptocurrency, bidding, analytics",
+          "MegaETH, auction, dashboard, allocation checker, blockchain, cryptocurrency, bidding, analytics",
       },
       {
         name: "author",
@@ -50,12 +50,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         property: "og:title",
-        content: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+        content: "MegaETH Dashboard - Auction Analytics & Allocation Checker",
       },
       {
         property: "og:description",
         content:
-          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+          "Track MegaETH auction statistics, check allocation status, and monitor bidding activity in real-time.",
       },
       {
         property: "og:image",
@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         property: "og:site_name",
-        content: "MegaEth Dashboard",
+        content: "MegaETH Dashboard",
       },
       // Twitter Card
       {
@@ -76,12 +76,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         name: "twitter:title",
-        content: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+        content: "MegaETH Dashboard - Auction Analytics & Allocation Checker",
       },
       {
         name: "twitter:description",
         content:
-          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+          "Track MegaETH auction statistics, check allocation status, and monitor bidding activity in real-time.",
       },
       {
         name: "twitter:image",
