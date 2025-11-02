@@ -380,7 +380,7 @@ function App() {
                   <p className="text-3xl font-bold text-cyan-400">
                     {formatNumber(stats?.totalBids)}
                   </p>
-                  <p className="text-sm text-gray-500">Number of bids</p>
+                  <p className="text-sm text-gray-500">Number of bidders</p>
                 </div>
                 <div className="pt-3 border-t border-slate-700">
                   <p className="text-2xl font-semibold text-white">
@@ -427,6 +427,41 @@ function App() {
             </CardContent>
           </Card>
 
+          {/* Total Refunds Overview Card */}
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500/10 rounded-lg">
+                  <RotateCcw className="w-6 h-6 text-purple-400" />
+                </div>
+                <div>
+                  <CardTitle className="text-white text-xl">
+                    Total Refunds
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    All refunds combined
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-3xl font-bold text-purple-400">
+                    {formatNumber(stats?.totalRefunds)}
+                  </p>
+                  <p className="text-sm text-gray-500">Number of refunds</p>
+                </div>
+                <div className="pt-3 border-t border-slate-700">
+                  <p className="text-2xl font-semibold text-white">
+                    {formatUSDT(stats?.totalRefundedUSDT)}
+                  </p>
+                  <p className="text-sm text-gray-500">Total value (USDT)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Cancellations Card */}
           <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-red-500/50 transition-all duration-300">
             <CardHeader>
@@ -457,41 +492,6 @@ function App() {
                 <div className="pt-3 border-t border-slate-700">
                   <p className="text-2xl font-semibold text-white">
                     {formatUSDT(stats?.totalCancellationsUSDT)}
-                  </p>
-                  <p className="text-sm text-gray-500">Total value (USDT)</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Total Refunds Overview Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-all duration-300">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500/10 rounded-lg">
-                  <RotateCcw className="w-6 h-6 text-purple-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-white text-xl">
-                    Total Refunds
-                  </CardTitle>
-                  <CardDescription className="text-gray-400">
-                    All refunds combined
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-3xl font-bold text-purple-400">
-                    {formatNumber(stats?.totalRefunds)}
-                  </p>
-                  <p className="text-sm text-gray-500">Number of refunds</p>
-                </div>
-                <div className="pt-3 border-t border-slate-700">
-                  <p className="text-2xl font-semibold text-white">
-                    {formatUSDT(stats?.totalRefundedUSDT)}
                   </p>
                   <p className="text-sm text-gray-500">Total value (USDT)</p>
                 </div>
@@ -754,7 +754,7 @@ function App() {
                           Transaction Hash
                         </TableHead>
                         <TableHead className="text-gray-300 font-semibold">
-                          Timestamp
+                          Time
                         </TableHead>
                       </TableRow>
                     </TableHeader>
