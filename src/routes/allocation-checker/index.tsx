@@ -30,13 +30,6 @@ function RouteComponent() {
 
   const auctionHistory = data?.AuctionHistory || [];
 
-  // Calculate user stats
-  const totalBids = auctionHistory.length;
-  const totalBidAmount = auctionHistory.reduce(
-    (sum, auction) => sum + (Number(auction.amount) || 0),
-    0
-  );
-
   // Separate by status
   const acceptedBids = auctionHistory.filter(
     (auction) => auction.status === "Allocated"
@@ -47,6 +40,9 @@ function RouteComponent() {
       auction.status === "PartiallyRefunded" ||
       auction.status === "Refunded"
   );
+  const lastBid = auctionHistory
+    .filter((auction) => auction.status === "Bidding")
+    ?.at(-1);
 
   const totalAcceptedAmount = acceptedBids.reduce(
     (sum, auction) => sum + (Number(auction.amount) || 0),
@@ -169,7 +165,7 @@ function RouteComponent() {
             <>
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {/* Total Bids Card */}
+                {/* Last Bid Card */}
                 <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-cyan-500/50 transition-all duration-300">
                   <CardHeader>
                     <div className="flex items-center gap-3">
@@ -178,30 +174,36 @@ function RouteComponent() {
                       </div>
                       <div>
                         <CardTitle className="text-white text-xl">
-                          Total Bids
+                          Last Bid
                         </CardTitle>
                         <CardDescription className="text-gray-400">
-                          Your bid count
+                          Your most recent bid
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div>
-                        <p className="text-3xl font-bold text-cyan-400">
-                          {formatNumber(totalBids)}
-                        </p>
-                        <p className="text-sm text-gray-500">Number of bids</p>
-                      </div>
-                      <div className="pt-3 border-t border-slate-700">
-                        <p className="text-2xl font-semibold text-white">
-                          {formatNumber(totalBidAmount)} USDT
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Total bid amount
-                        </p>
-                      </div>
+                      {lastBid ? (
+                        <div>
+                          <p className="text-3xl font-bold text-cyan-400">
+                            {formatNumber(Number(lastBid.amount))}{" "}
+                            USDT
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Last bid amount
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-3xl font-bold text-gray-500">
+                            No bids
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            No recent bids found
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -227,12 +229,6 @@ function RouteComponent() {
                     <div className="space-y-3">
                       <div>
                         <p className="text-3xl font-bold text-green-400">
-                          {formatNumber(acceptedBids.length)}
-                        </p>
-                        <p className="text-sm text-gray-500">Accepted bids</p>
-                      </div>
-                      <div className="pt-3 border-t border-slate-700">
-                        <p className="text-2xl font-semibold text-white">
                           {formatNumber(totalAcceptedAmount)} USDT
                         </p>
                         <p className="text-sm text-gray-500">
@@ -264,12 +260,6 @@ function RouteComponent() {
                     <div className="space-y-3">
                       <div>
                         <p className="text-3xl font-bold text-purple-400">
-                          {formatNumber(refundedBids.length)}
-                        </p>
-                        <p className="text-sm text-gray-500">Refunded bids</p>
-                      </div>
-                      <div className="pt-3 border-t border-slate-700">
-                        <p className="text-2xl font-semibold text-white">
                           {formatNumber(totalRefundedAmount)} USDT
                         </p>
                         <p className="text-sm text-gray-500">Refunded amount</p>

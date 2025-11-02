@@ -61,6 +61,7 @@ const GET_USER_AUCTION_HISTORY = graphql(`
       amount
       entityID
       status
+      lockup
       txHash
       timestamp
     }

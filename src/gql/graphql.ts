@@ -77,6 +77,7 @@ export type AuctionHistory = {
   amount: Scalars['numeric']['output'];
   entityID: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  lockup?: Maybe<Scalars['Boolean']['output']>;
   status: Scalars['status']['output'];
   timestamp: Scalars['numeric']['output'];
   txHash: Scalars['String']['output'];
@@ -91,6 +92,7 @@ export type AuctionHistory_Bool_Exp = {
   amount?: InputMaybe<Numeric_Comparison_Exp>;
   entityID?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
+  lockup?: InputMaybe<Boolean_Comparison_Exp>;
   status?: InputMaybe<Status_Comparison_Exp>;
   timestamp?: InputMaybe<Numeric_Comparison_Exp>;
   txHash?: InputMaybe<String_Comparison_Exp>;
@@ -102,6 +104,7 @@ export type AuctionHistory_Order_By = {
   amount?: InputMaybe<Order_By>;
   entityID?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  lockup?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
   timestamp?: InputMaybe<Order_By>;
   txHash?: InputMaybe<Order_By>;
@@ -117,6 +120,8 @@ export enum AuctionHistory_Select_Column {
   EntityId = 'entityID',
   /** column name */
   Id = 'id',
+  /** column name */
+  Lockup = 'lockup',
   /** column name */
   Status = 'status',
   /** column name */
@@ -139,6 +144,7 @@ export type AuctionHistory_Stream_Cursor_Value_Input = {
   amount?: InputMaybe<Scalars['numeric']['input']>;
   entityID?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lockup?: InputMaybe<Scalars['Boolean']['input']>;
   status?: InputMaybe<Scalars['status']['input']>;
   timestamp?: InputMaybe<Scalars['numeric']['input']>;
   txHash?: InputMaybe<Scalars['String']['input']>;
@@ -1385,7 +1391,7 @@ export type GetUserAuctionHistoryQueryVariables = Exact<{
 }>;
 
 
-export type GetUserAuctionHistoryQuery = { __typename?: 'query_root', AuctionHistory: Array<{ __typename?: 'AuctionHistory', id: string, addr: string, amount: any, entityID: string, status: any, txHash: string, timestamp: any }> };
+export type GetUserAuctionHistoryQuery = { __typename?: 'query_root', AuctionHistory: Array<{ __typename?: 'AuctionHistory', id: string, addr: string, amount: any, entityID: string, status: any, lockup?: boolean | null, txHash: string, timestamp: any }> };
 
 export type GetSaleStatsQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1396,5 +1402,5 @@ export type GetSaleStatsQuery = { __typename?: 'query_root', SaleStats: Array<{ 
 
 
 export const GetAuctionHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAuctionHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuctionHistory_order_by"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"AuctionHistory_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"entityID"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetAuctionHistoryQuery, GetAuctionHistoryQueryVariables>;
-export const GetUserAuctionHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserAuctionHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"addr"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_ilike"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"timestamp"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"entityID"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetUserAuctionHistoryQuery, GetUserAuctionHistoryQueryVariables>;
+export const GetUserAuctionHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserAuctionHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"addr"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_ilike"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"timestamp"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"entityID"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lockup"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetUserAuctionHistoryQuery, GetUserAuctionHistoryQueryVariables>;
 export const GetSaleStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getSaleStats"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SaleStats"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"totalBids"}},{"kind":"Field","name":{"kind":"Name","value":"totalBidsUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalCancellations"}},{"kind":"Field","name":{"kind":"Name","value":"totalCancellationsUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalFullRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalFullRefunds"}},{"kind":"Field","name":{"kind":"Name","value":"totalWinners"}},{"kind":"Field","name":{"kind":"Name","value":"totalPartialRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalPartialRefunds"}},{"kind":"Field","name":{"kind":"Name","value":"totalRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalRefunds"}}]}}]}}]} as unknown as DocumentNode<GetSaleStatsQuery, GetSaleStatsQueryVariables>;
