@@ -23,5 +23,6 @@ const GET_SALE_STATS = graphql(`
 export function useSaleStats() {
   return useQuery(GET_SALE_STATS, {
     variables: { id: "ifyoureadthisyouareawesome" },
+    notifyOnNetworkStatusChange: false, // Prevent flickering on refetch
   });
 }

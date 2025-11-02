@@ -19,6 +19,14 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   TrendingUp,
   DollarSign,
@@ -32,6 +40,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  RefreshCw,
+  Search,
 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 
@@ -46,10 +56,13 @@ const Status = {
 } as const;
 
 function App() {
-  const { data, loading, error } = useSaleStats();
+  const { data, loading, error, refetch: refetchStats } = useSaleStats();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageChanging, setIsPageChanging] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [searchAddress, setSearchAddress] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const itemsPerPage = 10;
 
   // Build orderBy object based on sort state
@@ -63,15 +76,32 @@ function App() {
     return { id: Order_By.Desc };
   }, [sortOrder]);
 
+  // Build where clause based on status filter and search
+  const whereClause = useMemo(() => {
+    const conditions: any = {};
+
+    if (statusFilter) {
+      conditions.status = { _eq: statusFilter };
+    }
+
+    if (searchAddress.trim()) {
+      conditions.addr = { _ilike: `%${searchAddress.trim()}%` };
+    }
+
+    return Object.keys(conditions).length > 0 ? conditions : undefined;
+  }, [statusFilter, searchAddress]);
+
   const {
     data: auctionData,
     loading: auctionLoading,
     error: auctionError,
     previousData: previousAuctionData,
+    refetch: refetchAuction,
   } = useAuctionHistory(
     itemsPerPage,
     (currentPage - 1) * itemsPerPage,
-    orderBy
+    orderBy,
+    whereClause
   );
 
   const stats = data?.SaleStats?.[0];
@@ -219,6 +249,30 @@ function App() {
     );
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      // Reset to first page and refetch
+      setCurrentPage(1);
+
+      // Refetch both queries without showing loading state (preserving previous data)
+      await Promise.all([
+        refetchStats(),
+        refetchAuction({
+          limit: itemsPerPage,
+          offset: 0,
+          orderBy,
+          where: whereClause,
+        }),
+      ]);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    } finally {
+      // Small delay to show the refresh animation completed
+      setTimeout(() => setIsRefreshing(false), 300);
+    }
+  };
+
   const toggleSort = () => {
     if (sortOrder === null) {
       setSortOrder("desc");
@@ -272,14 +326,27 @@ function App() {
       <section className="relative py-12 px-6 border-b border-slate-700/50">
         <div className="absolute inset-0 bg-linear-to-r from-cyan-500/5 via-blue-500/5 to-purple-500/5"></div>
         <div className="relative max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-2">
-            <Activity className="w-8 h-8 text-cyan-400" />
-            <h1 className="text-4xl md:text-5xl font-black text-white">
-              <span className="bg-linear-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                MegaETH
-              </span>{" "}
-              <span className="text-gray-300">Sale Dashboard</span>
-            </h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-4">
+              <Activity className="w-8 h-8 text-cyan-400" />
+              <h1 className="text-4xl md:text-5xl font-black text-white">
+                <span className="bg-linear-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                  MegaETH
+                </span>{" "}
+                <span className="text-gray-300">Sale Dashboard</span>
+              </h1>
+            </div>
+            <Button
+              onClick={handleRefresh}
+              disabled={isRefreshing || loading || auctionLoading}
+              className="bg-cyan-500 hover:bg-cyan-600 text-white border-none disabled:opacity-50"
+              size="default"
+            >
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              {isRefreshing ? "Refreshing..." : "Refresh"}
+            </Button>
           </div>
           <p className="text-lg text-gray-400 ml-12">
             Real-time statistics and analytics for the MegaETH sale
@@ -512,14 +579,122 @@ function App() {
       <section className="py-8 px-6 max-w-7xl mx-auto pb-16">
         <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-white text-2xl">
-                  Auction History
-                </CardTitle>
-                <CardDescription className="text-gray-400 mt-2">
-                  Detailed transaction history for all auction participants
-                </CardDescription>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="text-white text-2xl">
+                    Auction History
+                  </CardTitle>
+                  <CardDescription className="text-gray-400 mt-2">
+                    Detailed transaction history for all auction participants
+                  </CardDescription>
+                </div>
+              </div>
+
+              {/* Filters Row */}
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Search Input */}
+                <div className="relative flex-1 min-w-[250px] max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search by address..."
+                    value={searchAddress}
+                    onChange={(e) => {
+                      setSearchAddress(e.target.value);
+                      setCurrentPage(1); // Reset to first page when searching
+                    }}
+                    className="pl-10 bg-slate-800 border-slate-600 text-gray-300 placeholder:text-gray-500 focus:border-cyan-500"
+                  />
+                  {searchAddress && (
+                    <button
+                      onClick={() => {
+                        setSearchAddress("");
+                        setCurrentPage(1);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                      title="Clear search"
+                    >
+                      <XCircle className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Status Filter */}
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-gray-400 whitespace-nowrap">
+                    Filter by Status:
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={statusFilter || "all"}
+                      onValueChange={(value) => {
+                        setStatusFilter(value === "all" ? null : value);
+                        setCurrentPage(1); // Reset to first page when filtering
+                      }}
+                    >
+                      <SelectTrigger
+                        className={`min-w-[200px] bg-slate-800 border hover:border-cyan-500/50 transition-colors ${
+                          statusFilter
+                            ? "border-cyan-500 text-cyan-400"
+                            : "border-slate-600 text-gray-300"
+                        }`}
+                      >
+                        <SelectValue placeholder="All Statuses" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-slate-800 border-slate-700">
+                        <SelectItem
+                          value="all"
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          All Statuses
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Bidding}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Bidding
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.CancelledAndRefunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Cancelled & Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.PartiallyRefunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Partially Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Refunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Allocated}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Allocated
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {statusFilter && (
+                      <button
+                        onClick={() => {
+                          setStatusFilter(null);
+                          setCurrentPage(1);
+                        }}
+                        className="text-cyan-400 hover:text-cyan-300 transition-colors p-1"
+                        title="Clear filter"
+                      >
+                        <XCircle className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </CardHeader>
