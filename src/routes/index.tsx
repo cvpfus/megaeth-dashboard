@@ -625,7 +625,7 @@ function App() {
                 </div>
 
                 {/* Status Filter */}
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                   <label className="text-sm text-gray-400 whitespace-nowrap">
                     Filter by Status:
                   </label>
@@ -698,7 +698,7 @@ function App() {
                       </button>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </CardHeader>
