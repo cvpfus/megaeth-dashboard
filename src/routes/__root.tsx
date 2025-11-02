@@ -2,44 +2,135 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
+import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
-import appCss from '../styles.css?url'
+import appCss from "../styles.css?url";
 
-import type { QueryClient } from '@tanstack/react-query'
+import type { QueryClient } from "@tanstack/react-query";
 
 interface MyRouterContext {
-  queryClient: QueryClient
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
       {
-        charSet: 'utf-8',
+        charSet: "utf-8",
       },
       {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
       },
       {
-        title: 'TanStack Start Starter',
+        title: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+      },
+      {
+        name: "description",
+        content:
+          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+      },
+      {
+        name: "keywords",
+        content:
+          "MegaEth, auction, dashboard, allocation checker, blockchain, cryptocurrency, bidding, analytics",
+      },
+      {
+        name: "author",
+        content: "cvpfus_id",
+      },
+      // Open Graph / Facebook
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:title",
+        content: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+      },
+      {
+        property: "og:description",
+        content:
+          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+      },
+      {
+        property: "og:image",
+        content: "/tanstack-circle-logo.png",
+      },
+      {
+        property: "og:url",
+        content: "https://mega.b8n.xyz",
+      },
+      {
+        property: "og:site_name",
+        content: "MegaEth Dashboard",
+      },
+      // Twitter Card
+      {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      {
+        name: "twitter:title",
+        content: "MegaEth Dashboard - Auction Analytics & Allocation Checker",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Track MegaEth auction statistics, check allocation status, and monitor bidding activity in real-time.",
+      },
+      {
+        name: "twitter:image",
+        content: "/tanstack-circle-logo.png",
+      },
+      {
+        name: "twitter:creator",
+        content: "@cvpfus_id",
+      },
+      {
+        name: "twitter:url",
+        content: "https://mega.b8n.xyz",
+      },
+      // Additional meta tags
+      {
+        name: "theme-color",
+        content: "#0f172a",
+      },
+      {
+        name: "msapplication-TileColor",
+        content: "#0f172a",
+      },
+      {
+        name: "robots",
+        content: "index, follow",
       },
     ],
     links: [
       {
-        rel: 'stylesheet',
+        rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        href: "/favicon.ico",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/tanstack-circle-logo.png",
+      },
+      {
+        rel: "manifest",
+        href: "/manifest.json",
       },
     ],
   }),
 
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -49,20 +140,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
+        {process.env.NODE_ENV === "development" && (
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[TanStackQueryDevtools]}
+          />
+        )}
         <Scripts />
       </body>
     </html>
-  )
+  );
 }
