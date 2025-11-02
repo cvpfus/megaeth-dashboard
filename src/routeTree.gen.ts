@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AllocationCheckerIndexRouteImport } from './routes/allocation-checker/index'
 import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AllocationCheckerIndexRoute = AllocationCheckerIndexRouteImport.update({
+  id: '/allocation-checker/',
+  path: '/allocation-checker/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
@@ -26,27 +32,31 @@ const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/allocation-checker': typeof AllocationCheckerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/allocation-checker': typeof AllocationCheckerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/allocation-checker/': typeof AllocationCheckerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/graphql'
+  fullPaths: '/' | '/api/graphql' | '/allocation-checker'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/graphql'
-  id: '__root__' | '/' | '/api/graphql'
+  to: '/' | '/api/graphql' | '/allocation-checker'
+  id: '__root__' | '/' | '/api/graphql' | '/allocation-checker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiGraphqlRoute: typeof ApiGraphqlRoute
+  AllocationCheckerIndexRoute: typeof AllocationCheckerIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/allocation-checker/': {
+      id: '/allocation-checker/'
+      path: '/allocation-checker'
+      fullPath: '/allocation-checker'
+      preLoaderRoute: typeof AllocationCheckerIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/graphql': {
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
+  AllocationCheckerIndexRoute: AllocationCheckerIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

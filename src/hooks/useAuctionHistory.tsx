@@ -49,3 +49,28 @@ export function useAuctionHistory(
     notifyOnNetworkStatusChange: false, // Prevent flickering on refetch
   });
 }
+
+const GET_USER_AUCTION_HISTORY = graphql(`
+  query getUserAuctionHistory($address: String!) {
+    AuctionHistory(
+      where: { addr: { _ilike: $address } }
+      order_by: { timestamp: desc }
+    ) {
+      id
+      addr
+      amount
+      entityID
+      status
+      txHash
+      timestamp
+    }
+  }
+`);
+
+export function useUserAuctionHistory(address?: string) {
+  return useQuery(GET_USER_AUCTION_HISTORY, {
+    variables: { address: address || "" },
+    skip: !address || address.trim() === "",
+    notifyOnNetworkStatusChange: false,
+  });
+}

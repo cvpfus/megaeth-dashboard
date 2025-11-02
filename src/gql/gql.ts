@@ -15,10 +15,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n    $where: AuctionHistory_bool_exp\n  ) {\n    AuctionHistory(\n      limit: $limit\n      offset: $offset\n      order_by: $orderBy\n      where: $where\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": typeof types.GetAuctionHistoryDocument,
+    "\n  query getUserAuctionHistory($address: String!) {\n    AuctionHistory(\n      where: { addr: { _ilike: $address } }\n      order_by: { timestamp: desc }\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": typeof types.GetUserAuctionHistoryDocument,
     "\n  query getSaleStats($id: String!) {\n    SaleStats(where: { id: { _eq: $id } }) {\n      id\n      totalBids\n      totalBidsUSDT\n      totalCancellations\n      totalCancellationsUSDT\n      totalFullRefundedUSDT\n      totalFullRefunds\n      totalWinners\n      totalPartialRefundedUSDT\n      totalPartialRefunds\n      totalRefundedUSDT\n      totalRefunds\n    }\n  }\n": typeof types.GetSaleStatsDocument,
 };
 const documents: Documents = {
     "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n    $where: AuctionHistory_bool_exp\n  ) {\n    AuctionHistory(\n      limit: $limit\n      offset: $offset\n      order_by: $orderBy\n      where: $where\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": types.GetAuctionHistoryDocument,
+    "\n  query getUserAuctionHistory($address: String!) {\n    AuctionHistory(\n      where: { addr: { _ilike: $address } }\n      order_by: { timestamp: desc }\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n": types.GetUserAuctionHistoryDocument,
     "\n  query getSaleStats($id: String!) {\n    SaleStats(where: { id: { _eq: $id } }) {\n      id\n      totalBids\n      totalBidsUSDT\n      totalCancellations\n      totalCancellationsUSDT\n      totalFullRefundedUSDT\n      totalFullRefunds\n      totalWinners\n      totalPartialRefundedUSDT\n      totalPartialRefunds\n      totalRefundedUSDT\n      totalRefunds\n    }\n  }\n": types.GetSaleStatsDocument,
 };
 
@@ -40,6 +42,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n    $where: AuctionHistory_bool_exp\n  ) {\n    AuctionHistory(\n      limit: $limit\n      offset: $offset\n      order_by: $orderBy\n      where: $where\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"): (typeof documents)["\n  query getAuctionHistory(\n    $limit: Int\n    $offset: Int\n    $orderBy: [AuctionHistory_order_by!]\n    $where: AuctionHistory_bool_exp\n  ) {\n    AuctionHistory(\n      limit: $limit\n      offset: $offset\n      order_by: $orderBy\n      where: $where\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getUserAuctionHistory($address: String!) {\n    AuctionHistory(\n      where: { addr: { _ilike: $address } }\n      order_by: { timestamp: desc }\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"): (typeof documents)["\n  query getUserAuctionHistory($address: String!) {\n    AuctionHistory(\n      where: { addr: { _ilike: $address } }\n      order_by: { timestamp: desc }\n    ) {\n      id\n      addr\n      amount\n      entityID\n      status\n      txHash\n      timestamp\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
