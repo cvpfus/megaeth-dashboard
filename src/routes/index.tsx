@@ -30,7 +30,6 @@ import {
   Activity,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -590,12 +589,7 @@ function App() {
             </div>
           </CardHeader>
           <CardContent>
-            {auctionLoading && auctionHistory.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 flex items-center justify-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Loading auction history...
-              </div>
-            ) : auctionError ? (
+            {auctionError ? (
               <div className="text-center py-8 text-red-400">
                 Error loading auction history: {auctionError.message}
               </div>
@@ -605,16 +599,7 @@ function App() {
               </div>
             ) : (
               <>
-                <div className="relative rounded-lg border border-slate-700 overflow-hidden">
-                  {/* Loading overlay for pagination */}
-                  {auctionLoading && (
-                    <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px] z-10 flex items-center justify-center">
-                      <div className="flex items-center gap-2 text-cyan-400 bg-slate-800 px-4 py-2 rounded-lg border border-cyan-500/30 shadow-lg">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span className="text-sm font-medium">Loading...</span>
-                      </div>
-                    </div>
-                  )}
+                <div className="rounded-lg border border-slate-700 overflow-hidden">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-slate-800/80 hover:bg-slate-800/80">
