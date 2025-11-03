@@ -22,13 +22,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   TrendingUp,
   DollarSign,
   XCircle,
@@ -41,7 +34,6 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  RefreshCw,
   Search,
 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
@@ -57,13 +49,11 @@ const Status = {
 } as const;
 
 function App() {
-  const { data, loading, error, refetch: refetchStats } = useSaleStats();
+  const { data, loading, error } = useSaleStats();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageChanging, setIsPageChanging] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [searchAddress, setSearchAddress] = useState("");
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const itemsPerPage = 10;
 
   // Build orderBy object based on sort state
@@ -77,27 +67,22 @@ function App() {
     return { id: Order_By.Desc };
   }, [sortOrder]);
 
-  // Build where clause based on status filter and search
+  // Build where clause based on search
   const whereClause = useMemo(() => {
     const conditions: any = {};
-
-    if (statusFilter) {
-      conditions.status = { _eq: statusFilter };
-    }
 
     if (searchAddress.trim()) {
       conditions.addr = { _ilike: `%${searchAddress.trim()}%` };
     }
 
     return Object.keys(conditions).length > 0 ? conditions : undefined;
-  }, [statusFilter, searchAddress]);
+  }, [searchAddress]);
 
   const {
     data: auctionData,
     loading: auctionLoading,
     error: auctionError,
     previousData: previousAuctionData,
-    refetch: refetchAuction,
   } = useAuctionHistory(
     itemsPerPage,
     (currentPage - 1) * itemsPerPage,
@@ -250,30 +235,6 @@ function App() {
     );
   };
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      // Reset to first page and refetch
-      setCurrentPage(1);
-
-      // Refetch both queries without showing loading state (preserving previous data)
-      await Promise.all([
-        refetchStats(),
-        refetchAuction({
-          limit: itemsPerPage,
-          offset: 0,
-          orderBy,
-          where: whereClause,
-        }),
-      ]);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    } finally {
-      // Small delay to show the refresh animation completed
-      setTimeout(() => setIsRefreshing(false), 300);
-    }
-  };
-
   const toggleSort = () => {
     if (sortOrder === null) {
       setSortOrder("desc");
@@ -303,7 +264,8 @@ function App() {
     }
   }, [auctionLoading, isPageChanging]);
 
-  if (loading) {
+  // Only show loading screen on initial load, not during polling
+  if (loading && !data) {
     return (
       <div className="min-h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-white text-xl">Loading sale statistics...</div>
@@ -340,17 +302,6 @@ function App() {
                 <span className="text-gray-300">Sale Dashboard</span>
               </h1>
             </div>
-            <Button
-              onClick={handleRefresh}
-              disabled={isRefreshing || loading || auctionLoading}
-              className="bg-cyan-500 hover:bg-cyan-600 text-white border-none disabled:opacity-50"
-              size="default"
-            >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
-              />
-              {isRefreshing ? "Refreshing..." : "Refresh"}
-            </Button>
           </div>
           <p className="text-lg text-gray-400 ml-12">
             Real-time statistics and analytics for the MegaETH sale
@@ -362,7 +313,9 @@ function App() {
       <section className="py-8 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Bids Overview Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-cyan-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-cyan-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-cyan-500/50 border-cyan-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-cyan-500/10 rounded-lg">
@@ -397,7 +350,9 @@ function App() {
           </Card>
 
           {/* Winners Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-yellow-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-yellow-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-yellow-500/50 border-yellow-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-yellow-500/10 rounded-lg">
@@ -432,7 +387,9 @@ function App() {
           </Card>
 
           {/* Total Refunds Overview Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-purple-500/50 border-purple-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -467,7 +424,9 @@ function App() {
           </Card>
 
           {/* Cancellations Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-red-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-red-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-red-500/50 border-red-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-500/10 rounded-lg">
@@ -504,7 +463,9 @@ function App() {
           </Card>
 
           {/* Partial Refunds Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-orange-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-orange-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-orange-500/50 border-orange-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-orange-500/10 rounded-lg">
@@ -541,7 +502,9 @@ function App() {
           </Card>
 
           {/* Full Refunds Card */}
-          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-green-500/50 transition-all duration-300">
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-green-500/50 transition-colors duration-300 ${loading ? "shadow-lg shadow-green-500/50 border-green-500" : ""}`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-500/10 rounded-lg">
@@ -623,87 +586,11 @@ function App() {
                     </button>
                   )}
                 </div>
-
-                {/* Status Filter */}
-                {/* <div className="flex items-center gap-3">
-                  <label className="text-sm text-gray-400 whitespace-nowrap">
-                    Filter by Status:
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <Select
-                      value={statusFilter || "all"}
-                      onValueChange={(value) => {
-                        setStatusFilter(value === "all" ? null : value);
-                        setCurrentPage(1); // Reset to first page when filtering
-                      }}
-                    >
-                      <SelectTrigger
-                        className={`min-w-[200px] bg-slate-800 border hover:border-cyan-500/50 transition-colors ${
-                          statusFilter
-                            ? "border-cyan-500 text-cyan-400"
-                            : "border-slate-600 text-gray-300"
-                        }`}
-                      >
-                        <SelectValue placeholder="All Statuses" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-slate-800 border-slate-700">
-                        <SelectItem
-                          value="all"
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          All Statuses
-                        </SelectItem>
-                        <SelectItem
-                          value={Status.Bidding}
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          Bidding
-                        </SelectItem>
-                        <SelectItem
-                          value={Status.CancelledAndRefunded}
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          Cancelled & Refunded
-                        </SelectItem>
-                        <SelectItem
-                          value={Status.PartiallyRefunded}
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          Partially Refunded
-                        </SelectItem>
-                        <SelectItem
-                          value={Status.Refunded}
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          Refunded
-                        </SelectItem>
-                        <SelectItem
-                          value={Status.Allocated}
-                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
-                        >
-                          Allocated
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {statusFilter && (
-                      <button
-                        onClick={() => {
-                          setStatusFilter(null);
-                          setCurrentPage(1);
-                        }}
-                        className="text-cyan-400 hover:text-cyan-300 transition-colors p-1"
-                        title="Clear filter"
-                      >
-                        <XCircle className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div> */}
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            {auctionLoading && !previousAuctionData ? (
+            {auctionLoading && auctionHistory.length === 0 ? (
               <div className="text-center py-8 text-gray-400 flex items-center justify-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 Loading auction history...

@@ -46,7 +46,8 @@ export function useAuctionHistory(
       orderBy: orderBy || defaultOrderBy,
       where,
     },
-    notifyOnNetworkStatusChange: false, // Prevent flickering on refetch
+    notifyOnNetworkStatusChange: true, // Allow loading state updates during polling
+    pollInterval: 5000, // Poll every 5 seconds
   });
 }
 
@@ -72,6 +73,6 @@ export function useUserAuctionHistory(address?: string) {
   return useQuery(GET_USER_AUCTION_HISTORY, {
     variables: { address: address || "" },
     skip: !address || address.trim() === "",
-    notifyOnNetworkStatusChange: false,
+    notifyOnNetworkStatusChange: true,
   });
 }

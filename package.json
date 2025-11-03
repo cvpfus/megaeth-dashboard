@@ -57,5 +57,8 @@
   },
   "trustedDependencies": [
     "@parcel/watcher"
-  ]
+  ],
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  }
 }
