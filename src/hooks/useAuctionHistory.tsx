@@ -76,3 +76,45 @@ export function useUserAuctionHistory(address?: string) {
     notifyOnNetworkStatusChange: true,
   });
 }
+
+// Hook for recent cancellations
+const GET_RECENT_CANCELLATIONS = graphql(`
+  query getRecentCancellations(
+    $limit: Int
+    $offset: Int
+    $orderBy: [AuctionHistory_order_by!]
+  ) {
+    AuctionHistory(
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+      where: { status: { _eq: "CancelledAndRefunded" } }
+    ) {
+      id
+      addr
+      amount
+      status
+      txHash
+      timestamp
+    }
+  }
+`);
+
+export function useRecentCancellations(
+  limit = 5,
+  offset = 0,
+  orderBy?: AuctionHistory_Order_By
+) {
+  // Default order by timestamp desc for recent cancellations
+  const defaultOrderBy: AuctionHistory_Order_By = { timestamp: Order_By.Desc };
+
+  return useQuery(GET_RECENT_CANCELLATIONS, {
+    variables: {
+      limit,
+      offset,
+      orderBy: orderBy || defaultOrderBy,
+    },
+    notifyOnNetworkStatusChange: true,
+    pollInterval: 5000, // Poll every 5 seconds
+  });
+}

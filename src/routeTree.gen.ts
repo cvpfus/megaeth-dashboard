@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CancellationsIndexRouteImport } from './routes/cancellations/index'
 import { Route as AllocationCheckerIndexRouteImport } from './routes/allocation-checker/index'
 import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CancellationsIndexRoute = CancellationsIndexRouteImport.update({
+  id: '/cancellations/',
+  path: '/cancellations/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AllocationCheckerIndexRoute = AllocationCheckerIndexRouteImport.update({
@@ -33,30 +39,39 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
   '/allocation-checker': typeof AllocationCheckerIndexRoute
+  '/cancellations': typeof CancellationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
   '/allocation-checker': typeof AllocationCheckerIndexRoute
+  '/cancellations': typeof CancellationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
   '/allocation-checker/': typeof AllocationCheckerIndexRoute
+  '/cancellations/': typeof CancellationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/graphql' | '/allocation-checker'
+  fullPaths: '/' | '/api/graphql' | '/allocation-checker' | '/cancellations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/graphql' | '/allocation-checker'
-  id: '__root__' | '/' | '/api/graphql' | '/allocation-checker/'
+  to: '/' | '/api/graphql' | '/allocation-checker' | '/cancellations'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/graphql'
+    | '/allocation-checker/'
+    | '/cancellations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiGraphqlRoute: typeof ApiGraphqlRoute
   AllocationCheckerIndexRoute: typeof AllocationCheckerIndexRoute
+  CancellationsIndexRoute: typeof CancellationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +81,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cancellations/': {
+      id: '/cancellations/'
+      path: '/cancellations'
+      fullPath: '/cancellations'
+      preLoaderRoute: typeof CancellationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/allocation-checker/': {
@@ -89,6 +111,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
   AllocationCheckerIndexRoute: AllocationCheckerIndexRoute,
+  CancellationsIndexRoute: CancellationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

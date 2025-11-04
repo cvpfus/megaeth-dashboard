@@ -36,6 +36,7 @@ import {
   Search,
 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({ component: App });
 
@@ -53,6 +54,8 @@ function App() {
   const [isPageChanging, setIsPageChanging] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
   const [searchAddress, setSearchAddress] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+
   const itemsPerPage = 10;
 
   // Build orderBy object based on sort state
@@ -70,12 +73,16 @@ function App() {
   const whereClause = useMemo(() => {
     const conditions: any = {};
 
+    if (statusFilter) {
+      conditions.status = { _eq: statusFilter };
+    }
+
     if (searchAddress.trim()) {
       conditions.addr = { _ilike: `%${searchAddress.trim()}%` };
     }
 
     return Object.keys(conditions).length > 0 ? conditions : undefined;
-  }, [searchAddress]);
+  }, [statusFilter, searchAddress]);
 
   const {
     data: auctionData,
@@ -584,6 +591,82 @@ function App() {
                       <XCircle className="w-4 h-4" />
                     </button>
                   )}
+                </div>
+
+                {/* Status Filter */}
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-gray-400 whitespace-nowrap">
+                    Filter by Status:
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={statusFilter || "all"}
+                      onValueChange={(value) => {
+                        setStatusFilter(value === "all" ? null : value);
+                        setCurrentPage(1); // Reset to first page when filtering
+                      }}
+                    >
+                      <SelectTrigger
+                        className={`min-w-[200px] bg-slate-800 border hover:border-cyan-500/50 transition-colors ${
+                          statusFilter
+                            ? "border-cyan-500 text-cyan-400"
+                            : "border-slate-600 text-gray-300"
+                        }`}
+                      >
+                        <SelectValue placeholder="All Statuses" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-slate-800 border-slate-700">
+                        <SelectItem
+                          value="all"
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          All Statuses
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Bidding}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Bidding
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.CancelledAndRefunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Cancelled & Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.PartiallyRefunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Partially Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Refunded}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value={Status.Allocated}
+                          className="text-gray-300 focus:bg-slate-700 focus:text-white"
+                        >
+                          Allocated
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {statusFilter && (
+                      <button
+                        onClick={() => {
+                          setStatusFilter(null);
+                          setCurrentPage(1);
+                        }}
+                        className="text-cyan-400 hover:text-cyan-300 transition-colors p-1"
+                        title="Clear filter"
+                      >
+                        <XCircle className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

@@ -19,6 +19,16 @@ export function Navigation() {
               Dashboard
             </Link>
             <Link
+              to="/cancellations"
+              className={`font-medium transition-colors ${
+                location.pathname === "/cancellations"
+                  ? "text-cyan-400"
+                  : "text-gray-400 hover:text-cyan-300"
+              }`}
+            >
+              Cancellations
+            </Link>
+            <Link
               to="/allocation-checker"
               className={`font-medium transition-colors ${
                 location.pathname === "/allocation-checker"

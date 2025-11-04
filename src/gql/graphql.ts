@@ -20,7 +20,7 @@ export type Scalars = {
   timestamptz: { input: any; output: any; }
 };
 
-/** columns and relationships of "AllocationSet" */
+/** columns and relationships of "envio.AllocationSet" */
 export type AllocationSet = {
   __typename?: 'AllocationSet';
   acceptedAmountUSDT: Scalars['numeric']['output'];
@@ -28,7 +28,7 @@ export type AllocationSet = {
   id: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "AllocationSet". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.AllocationSet". All fields are combined with a logical 'AND'. */
 export type AllocationSet_Bool_Exp = {
   _and?: InputMaybe<Array<AllocationSet_Bool_Exp>>;
   _not?: InputMaybe<AllocationSet_Bool_Exp>;
@@ -38,14 +38,14 @@ export type AllocationSet_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "AllocationSet". */
+/** Ordering options when selecting data from "envio.AllocationSet". */
 export type AllocationSet_Order_By = {
   acceptedAmountUSDT?: InputMaybe<Order_By>;
   entityID?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "AllocationSet" */
+/** select columns of table "envio.AllocationSet" */
 export enum AllocationSet_Select_Column {
   /** column name */
   AcceptedAmountUsdt = 'acceptedAmountUSDT',
@@ -70,7 +70,7 @@ export type AllocationSet_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "AuctionHistory" */
+/** columns and relationships of "envio.AuctionHistory" */
 export type AuctionHistory = {
   __typename?: 'AuctionHistory';
   addr: Scalars['String']['output'];
@@ -83,7 +83,7 @@ export type AuctionHistory = {
   txHash: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "AuctionHistory". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.AuctionHistory". All fields are combined with a logical 'AND'. */
 export type AuctionHistory_Bool_Exp = {
   _and?: InputMaybe<Array<AuctionHistory_Bool_Exp>>;
   _not?: InputMaybe<AuctionHistory_Bool_Exp>;
@@ -98,7 +98,7 @@ export type AuctionHistory_Bool_Exp = {
   txHash?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "AuctionHistory". */
+/** Ordering options when selecting data from "envio.AuctionHistory". */
 export type AuctionHistory_Order_By = {
   addr?: InputMaybe<Order_By>;
   amount?: InputMaybe<Order_By>;
@@ -110,7 +110,7 @@ export type AuctionHistory_Order_By = {
   txHash?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "AuctionHistory" */
+/** select columns of table "envio.AuctionHistory" */
 export enum AuctionHistory_Select_Column {
   /** column name */
   Addr = 'addr',
@@ -150,7 +150,7 @@ export type AuctionHistory_Stream_Cursor_Value_Input = {
   txHash?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "BidCancelled" */
+/** columns and relationships of "envio.BidCancelled" */
 export type BidCancelled = {
   __typename?: 'BidCancelled';
   addr: Scalars['String']['output'];
@@ -159,7 +159,7 @@ export type BidCancelled = {
   id: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "BidCancelled". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.BidCancelled". All fields are combined with a logical 'AND'. */
 export type BidCancelled_Bool_Exp = {
   _and?: InputMaybe<Array<BidCancelled_Bool_Exp>>;
   _not?: InputMaybe<BidCancelled_Bool_Exp>;
@@ -170,7 +170,7 @@ export type BidCancelled_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "BidCancelled". */
+/** Ordering options when selecting data from "envio.BidCancelled". */
 export type BidCancelled_Order_By = {
   addr?: InputMaybe<Order_By>;
   amount?: InputMaybe<Order_By>;
@@ -178,7 +178,7 @@ export type BidCancelled_Order_By = {
   id?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "BidCancelled" */
+/** select columns of table "envio.BidCancelled" */
 export enum BidCancelled_Select_Column {
   /** column name */
   Addr = 'addr',
@@ -206,7 +206,7 @@ export type BidCancelled_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "BidPlaced" */
+/** columns and relationships of "envio.BidPlaced" */
 export type BidPlaced = {
   __typename?: 'BidPlaced';
   bid_0: Scalars['numeric']['output'];
@@ -216,7 +216,7 @@ export type BidPlaced = {
   id: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "BidPlaced". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.BidPlaced". All fields are combined with a logical 'AND'. */
 export type BidPlaced_Bool_Exp = {
   _and?: InputMaybe<Array<BidPlaced_Bool_Exp>>;
   _not?: InputMaybe<BidPlaced_Bool_Exp>;
@@ -228,7 +228,7 @@ export type BidPlaced_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "BidPlaced". */
+/** Ordering options when selecting data from "envio.BidPlaced". */
 export type BidPlaced_Order_By = {
   bid_0?: InputMaybe<Order_By>;
   bid_1?: InputMaybe<Order_By>;
@@ -237,7 +237,7 @@ export type BidPlaced_Order_By = {
   id?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "BidPlaced" */
+/** select columns of table "envio.BidPlaced" */
 export enum BidPlaced_Select_Column {
   /** column name */
   Bid_0 = 'bid_0',
@@ -281,7 +281,7 @@ export type Boolean_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
 };
 
-/** columns and relationships of "EntityInitialized" */
+/** columns and relationships of "envio.EntityInitialized" */
 export type EntityInitialized = {
   __typename?: 'EntityInitialized';
   addr: Scalars['String']['output'];
@@ -289,7 +289,7 @@ export type EntityInitialized = {
   id: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "EntityInitialized". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.EntityInitialized". All fields are combined with a logical 'AND'. */
 export type EntityInitialized_Bool_Exp = {
   _and?: InputMaybe<Array<EntityInitialized_Bool_Exp>>;
   _not?: InputMaybe<EntityInitialized_Bool_Exp>;
@@ -299,14 +299,14 @@ export type EntityInitialized_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "EntityInitialized". */
+/** Ordering options when selecting data from "envio.EntityInitialized". */
 export type EntityInitialized_Order_By = {
   addr?: InputMaybe<Order_By>;
   entityID?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "EntityInitialized" */
+/** select columns of table "envio.EntityInitialized" */
 export enum EntityInitialized_Select_Column {
   /** column name */
   Addr = 'addr',
@@ -344,7 +344,7 @@ export type Int_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
-/** columns and relationships of "Refunded" */
+/** columns and relationships of "envio.Refunded" */
 export type Refunded = {
   __typename?: 'Refunded';
   addr: Scalars['String']['output'];
@@ -353,7 +353,7 @@ export type Refunded = {
   id: Scalars['String']['output'];
 };
 
-/** Boolean expression to filter rows from the table "Refunded". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.Refunded". All fields are combined with a logical 'AND'. */
 export type Refunded_Bool_Exp = {
   _and?: InputMaybe<Array<Refunded_Bool_Exp>>;
   _not?: InputMaybe<Refunded_Bool_Exp>;
@@ -364,7 +364,7 @@ export type Refunded_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "Refunded". */
+/** Ordering options when selecting data from "envio.Refunded". */
 export type Refunded_Order_By = {
   addr?: InputMaybe<Order_By>;
   amount?: InputMaybe<Order_By>;
@@ -372,7 +372,7 @@ export type Refunded_Order_By = {
   id?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "Refunded" */
+/** select columns of table "envio.Refunded" */
 export enum Refunded_Select_Column {
   /** column name */
   Addr = 'addr',
@@ -400,7 +400,7 @@ export type Refunded_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "SaleStats" */
+/** columns and relationships of "envio.SaleStats" */
 export type SaleStats = {
   __typename?: 'SaleStats';
   id: Scalars['String']['output'];
@@ -417,7 +417,7 @@ export type SaleStats = {
   totalWinners: Scalars['numeric']['output'];
 };
 
-/** Boolean expression to filter rows from the table "SaleStats". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.SaleStats". All fields are combined with a logical 'AND'. */
 export type SaleStats_Bool_Exp = {
   _and?: InputMaybe<Array<SaleStats_Bool_Exp>>;
   _not?: InputMaybe<SaleStats_Bool_Exp>;
@@ -436,7 +436,7 @@ export type SaleStats_Bool_Exp = {
   totalWinners?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "SaleStats". */
+/** Ordering options when selecting data from "envio.SaleStats". */
 export type SaleStats_Order_By = {
   id?: InputMaybe<Order_By>;
   totalBids?: InputMaybe<Order_By>;
@@ -452,7 +452,7 @@ export type SaleStats_Order_By = {
   totalWinners?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "SaleStats" */
+/** select columns of table "envio.SaleStats" */
 export enum SaleStats_Select_Column {
   /** column name */
   Id = 'id',
@@ -537,7 +537,7 @@ export type String_Comparison_Exp = {
   _similar?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "_meta" */
+/** columns and relationships of "envio._meta" */
 export type _Meta = {
   __typename?: '_meta';
   bufferBlock?: Maybe<Scalars['Int']['output']>;
@@ -552,7 +552,7 @@ export type _Meta = {
   startBlock?: Maybe<Scalars['Int']['output']>;
 };
 
-/** Boolean expression to filter rows from the table "_meta". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio._meta". All fields are combined with a logical 'AND'. */
 export type _Meta_Bool_Exp = {
   _and?: InputMaybe<Array<_Meta_Bool_Exp>>;
   _not?: InputMaybe<_Meta_Bool_Exp>;
@@ -569,7 +569,7 @@ export type _Meta_Bool_Exp = {
   startBlock?: InputMaybe<Int_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "_meta". */
+/** Ordering options when selecting data from "envio._meta". */
 export type _Meta_Order_By = {
   bufferBlock?: InputMaybe<Order_By>;
   chainId?: InputMaybe<Order_By>;
@@ -583,7 +583,7 @@ export type _Meta_Order_By = {
   startBlock?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "_meta" */
+/** select columns of table "envio._meta" */
 export enum _Meta_Select_Column {
   /** column name */
   BufferBlock = 'bufferBlock',
@@ -629,7 +629,7 @@ export type _Meta_Stream_Cursor_Value_Input = {
   startBlock?: InputMaybe<Scalars['Int']['input']>;
 };
 
-/** columns and relationships of "chain_metadata" */
+/** columns and relationships of "envio.chain_metadata" */
 export type Chain_Metadata = {
   __typename?: 'chain_metadata';
   block_height?: Maybe<Scalars['Int']['output']>;
@@ -645,7 +645,7 @@ export type Chain_Metadata = {
   timestamp_caught_up_to_head_or_endblock?: Maybe<Scalars['timestamptz']['output']>;
 };
 
-/** Boolean expression to filter rows from the table "chain_metadata". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.chain_metadata". All fields are combined with a logical 'AND'. */
 export type Chain_Metadata_Bool_Exp = {
   _and?: InputMaybe<Array<Chain_Metadata_Bool_Exp>>;
   _not?: InputMaybe<Chain_Metadata_Bool_Exp>;
@@ -663,7 +663,7 @@ export type Chain_Metadata_Bool_Exp = {
   timestamp_caught_up_to_head_or_endblock?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "chain_metadata". */
+/** Ordering options when selecting data from "envio.chain_metadata". */
 export type Chain_Metadata_Order_By = {
   block_height?: InputMaybe<Order_By>;
   chain_id?: InputMaybe<Order_By>;
@@ -678,7 +678,7 @@ export type Chain_Metadata_Order_By = {
   timestamp_caught_up_to_head_or_endblock?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "chain_metadata" */
+/** select columns of table "envio.chain_metadata" */
 export enum Chain_Metadata_Select_Column {
   /** column name */
   BlockHeight = 'block_height',
@@ -794,41 +794,41 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "AllocationSet" */
+  /** fetch data from the table: "envio.AllocationSet" */
   AllocationSet: Array<AllocationSet>;
-  /** fetch data from the table: "AllocationSet" using primary key columns */
+  /** fetch data from the table: "envio.AllocationSet" using primary key columns */
   AllocationSet_by_pk?: Maybe<AllocationSet>;
-  /** fetch data from the table: "AuctionHistory" */
+  /** fetch data from the table: "envio.AuctionHistory" */
   AuctionHistory: Array<AuctionHistory>;
-  /** fetch data from the table: "AuctionHistory" using primary key columns */
+  /** fetch data from the table: "envio.AuctionHistory" using primary key columns */
   AuctionHistory_by_pk?: Maybe<AuctionHistory>;
-  /** fetch data from the table: "BidCancelled" */
+  /** fetch data from the table: "envio.BidCancelled" */
   BidCancelled: Array<BidCancelled>;
-  /** fetch data from the table: "BidCancelled" using primary key columns */
+  /** fetch data from the table: "envio.BidCancelled" using primary key columns */
   BidCancelled_by_pk?: Maybe<BidCancelled>;
-  /** fetch data from the table: "BidPlaced" */
+  /** fetch data from the table: "envio.BidPlaced" */
   BidPlaced: Array<BidPlaced>;
-  /** fetch data from the table: "BidPlaced" using primary key columns */
+  /** fetch data from the table: "envio.BidPlaced" using primary key columns */
   BidPlaced_by_pk?: Maybe<BidPlaced>;
-  /** fetch data from the table: "EntityInitialized" */
+  /** fetch data from the table: "envio.EntityInitialized" */
   EntityInitialized: Array<EntityInitialized>;
-  /** fetch data from the table: "EntityInitialized" using primary key columns */
+  /** fetch data from the table: "envio.EntityInitialized" using primary key columns */
   EntityInitialized_by_pk?: Maybe<EntityInitialized>;
-  /** fetch data from the table: "Refunded" */
+  /** fetch data from the table: "envio.Refunded" */
   Refunded: Array<Refunded>;
-  /** fetch data from the table: "Refunded" using primary key columns */
+  /** fetch data from the table: "envio.Refunded" using primary key columns */
   Refunded_by_pk?: Maybe<Refunded>;
-  /** fetch data from the table: "SaleStats" */
+  /** fetch data from the table: "envio.SaleStats" */
   SaleStats: Array<SaleStats>;
-  /** fetch data from the table: "SaleStats" using primary key columns */
+  /** fetch data from the table: "envio.SaleStats" using primary key columns */
   SaleStats_by_pk?: Maybe<SaleStats>;
-  /** fetch data from the table: "_meta" */
+  /** fetch data from the table: "envio._meta" */
   _meta: Array<_Meta>;
-  /** fetch data from the table: "chain_metadata" */
+  /** fetch data from the table: "envio.chain_metadata" */
   chain_metadata: Array<Chain_Metadata>;
-  /** fetch data from the table: "raw_events" */
+  /** fetch data from the table: "envio.raw_events" */
   raw_events: Array<Raw_Events>;
-  /** fetch data from the table: "raw_events" using primary key columns */
+  /** fetch data from the table: "envio.raw_events" using primary key columns */
   raw_events_by_pk?: Maybe<Raw_Events>;
 };
 
@@ -962,7 +962,7 @@ export type Query_RootRaw_Events_By_PkArgs = {
   serial: Scalars['Int']['input'];
 };
 
-/** columns and relationships of "raw_events" */
+/** columns and relationships of "envio.raw_events" */
 export type Raw_Events = {
   __typename?: 'raw_events';
   block_fields: Scalars['jsonb']['output'];
@@ -981,24 +981,24 @@ export type Raw_Events = {
 };
 
 
-/** columns and relationships of "raw_events" */
+/** columns and relationships of "envio.raw_events" */
 export type Raw_EventsBlock_FieldsArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-/** columns and relationships of "raw_events" */
+/** columns and relationships of "envio.raw_events" */
 export type Raw_EventsParamsArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-/** columns and relationships of "raw_events" */
+/** columns and relationships of "envio.raw_events" */
 export type Raw_EventsTransaction_FieldsArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Boolean expression to filter rows from the table "raw_events". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "envio.raw_events". All fields are combined with a logical 'AND'. */
 export type Raw_Events_Bool_Exp = {
   _and?: InputMaybe<Array<Raw_Events_Bool_Exp>>;
   _not?: InputMaybe<Raw_Events_Bool_Exp>;
@@ -1018,7 +1018,7 @@ export type Raw_Events_Bool_Exp = {
   transaction_fields?: InputMaybe<Jsonb_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "raw_events". */
+/** Ordering options when selecting data from "envio.raw_events". */
 export type Raw_Events_Order_By = {
   block_fields?: InputMaybe<Order_By>;
   block_hash?: InputMaybe<Order_By>;
@@ -1035,7 +1035,7 @@ export type Raw_Events_Order_By = {
   transaction_fields?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "raw_events" */
+/** select columns of table "envio.raw_events" */
 export enum Raw_Events_Select_Column {
   /** column name */
   BlockFields = 'block_fields',
@@ -1105,61 +1105,61 @@ export type Status_Comparison_Exp = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "AllocationSet" */
+  /** fetch data from the table: "envio.AllocationSet" */
   AllocationSet: Array<AllocationSet>;
-  /** fetch data from the table: "AllocationSet" using primary key columns */
+  /** fetch data from the table: "envio.AllocationSet" using primary key columns */
   AllocationSet_by_pk?: Maybe<AllocationSet>;
-  /** fetch data from the table in a streaming manner: "AllocationSet" */
+  /** fetch data from the table in a streaming manner: "envio.AllocationSet" */
   AllocationSet_stream: Array<AllocationSet>;
-  /** fetch data from the table: "AuctionHistory" */
+  /** fetch data from the table: "envio.AuctionHistory" */
   AuctionHistory: Array<AuctionHistory>;
-  /** fetch data from the table: "AuctionHistory" using primary key columns */
+  /** fetch data from the table: "envio.AuctionHistory" using primary key columns */
   AuctionHistory_by_pk?: Maybe<AuctionHistory>;
-  /** fetch data from the table in a streaming manner: "AuctionHistory" */
+  /** fetch data from the table in a streaming manner: "envio.AuctionHistory" */
   AuctionHistory_stream: Array<AuctionHistory>;
-  /** fetch data from the table: "BidCancelled" */
+  /** fetch data from the table: "envio.BidCancelled" */
   BidCancelled: Array<BidCancelled>;
-  /** fetch data from the table: "BidCancelled" using primary key columns */
+  /** fetch data from the table: "envio.BidCancelled" using primary key columns */
   BidCancelled_by_pk?: Maybe<BidCancelled>;
-  /** fetch data from the table in a streaming manner: "BidCancelled" */
+  /** fetch data from the table in a streaming manner: "envio.BidCancelled" */
   BidCancelled_stream: Array<BidCancelled>;
-  /** fetch data from the table: "BidPlaced" */
+  /** fetch data from the table: "envio.BidPlaced" */
   BidPlaced: Array<BidPlaced>;
-  /** fetch data from the table: "BidPlaced" using primary key columns */
+  /** fetch data from the table: "envio.BidPlaced" using primary key columns */
   BidPlaced_by_pk?: Maybe<BidPlaced>;
-  /** fetch data from the table in a streaming manner: "BidPlaced" */
+  /** fetch data from the table in a streaming manner: "envio.BidPlaced" */
   BidPlaced_stream: Array<BidPlaced>;
-  /** fetch data from the table: "EntityInitialized" */
+  /** fetch data from the table: "envio.EntityInitialized" */
   EntityInitialized: Array<EntityInitialized>;
-  /** fetch data from the table: "EntityInitialized" using primary key columns */
+  /** fetch data from the table: "envio.EntityInitialized" using primary key columns */
   EntityInitialized_by_pk?: Maybe<EntityInitialized>;
-  /** fetch data from the table in a streaming manner: "EntityInitialized" */
+  /** fetch data from the table in a streaming manner: "envio.EntityInitialized" */
   EntityInitialized_stream: Array<EntityInitialized>;
-  /** fetch data from the table: "Refunded" */
+  /** fetch data from the table: "envio.Refunded" */
   Refunded: Array<Refunded>;
-  /** fetch data from the table: "Refunded" using primary key columns */
+  /** fetch data from the table: "envio.Refunded" using primary key columns */
   Refunded_by_pk?: Maybe<Refunded>;
-  /** fetch data from the table in a streaming manner: "Refunded" */
+  /** fetch data from the table in a streaming manner: "envio.Refunded" */
   Refunded_stream: Array<Refunded>;
-  /** fetch data from the table: "SaleStats" */
+  /** fetch data from the table: "envio.SaleStats" */
   SaleStats: Array<SaleStats>;
-  /** fetch data from the table: "SaleStats" using primary key columns */
+  /** fetch data from the table: "envio.SaleStats" using primary key columns */
   SaleStats_by_pk?: Maybe<SaleStats>;
-  /** fetch data from the table in a streaming manner: "SaleStats" */
+  /** fetch data from the table in a streaming manner: "envio.SaleStats" */
   SaleStats_stream: Array<SaleStats>;
-  /** fetch data from the table: "_meta" */
+  /** fetch data from the table: "envio._meta" */
   _meta: Array<_Meta>;
-  /** fetch data from the table in a streaming manner: "_meta" */
+  /** fetch data from the table in a streaming manner: "envio._meta" */
   _meta_stream: Array<_Meta>;
-  /** fetch data from the table: "chain_metadata" */
+  /** fetch data from the table: "envio.chain_metadata" */
   chain_metadata: Array<Chain_Metadata>;
-  /** fetch data from the table in a streaming manner: "chain_metadata" */
+  /** fetch data from the table in a streaming manner: "envio.chain_metadata" */
   chain_metadata_stream: Array<Chain_Metadata>;
-  /** fetch data from the table: "raw_events" */
+  /** fetch data from the table: "envio.raw_events" */
   raw_events: Array<Raw_Events>;
-  /** fetch data from the table: "raw_events" using primary key columns */
+  /** fetch data from the table: "envio.raw_events" using primary key columns */
   raw_events_by_pk?: Maybe<Raw_Events>;
-  /** fetch data from the table in a streaming manner: "raw_events" */
+  /** fetch data from the table in a streaming manner: "envio.raw_events" */
   raw_events_stream: Array<Raw_Events>;
 };
 
@@ -1393,6 +1393,15 @@ export type GetUserAuctionHistoryQueryVariables = Exact<{
 
 export type GetUserAuctionHistoryQuery = { __typename?: 'query_root', AuctionHistory: Array<{ __typename?: 'AuctionHistory', id: string, addr: string, amount: any, entityID: string, status: any, lockup?: boolean | null, txHash: string, timestamp: any }> };
 
+export type GetRecentCancellationsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<AuctionHistory_Order_By> | AuctionHistory_Order_By>;
+}>;
+
+
+export type GetRecentCancellationsQuery = { __typename?: 'query_root', AuctionHistory: Array<{ __typename?: 'AuctionHistory', id: string, addr: string, amount: any, status: any, txHash: string, timestamp: any }> };
+
 export type GetSaleStatsQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -1403,4 +1412,5 @@ export type GetSaleStatsQuery = { __typename?: 'query_root', SaleStats: Array<{ 
 
 export const GetAuctionHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAuctionHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuctionHistory_order_by"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"AuctionHistory_bool_exp"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"entityID"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetAuctionHistoryQuery, GetAuctionHistoryQueryVariables>;
 export const GetUserAuctionHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserAuctionHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"addr"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_ilike"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"timestamp"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"entityID"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lockup"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetUserAuctionHistoryQuery, GetUserAuctionHistoryQueryVariables>;
+export const GetRecentCancellationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getRecentCancellations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuctionHistory_order_by"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"AuctionHistory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"status"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"StringValue","value":"CancelledAndRefunded","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"addr"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"txHash"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}}]}}]}}]} as unknown as DocumentNode<GetRecentCancellationsQuery, GetRecentCancellationsQueryVariables>;
 export const GetSaleStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getSaleStats"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SaleStats"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"totalBids"}},{"kind":"Field","name":{"kind":"Name","value":"totalBidsUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalCancellations"}},{"kind":"Field","name":{"kind":"Name","value":"totalCancellationsUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalFullRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalFullRefunds"}},{"kind":"Field","name":{"kind":"Name","value":"totalWinners"}},{"kind":"Field","name":{"kind":"Name","value":"totalPartialRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalPartialRefunds"}},{"kind":"Field","name":{"kind":"Name","value":"totalRefundedUSDT"}},{"kind":"Field","name":{"kind":"Name","value":"totalRefunds"}}]}}]}}]} as unknown as DocumentNode<GetSaleStatsQuery, GetSaleStatsQueryVariables>;
