@@ -47,7 +47,7 @@ export function useAuctionHistory(
       where,
     },
     notifyOnNetworkStatusChange: true, // Allow loading state updates during polling
-    pollInterval: 5000, // Poll every 5 seconds
+    pollInterval: 2500, // Poll every 2.5 seconds
   });
 }
 
@@ -74,6 +74,7 @@ export function useUserAuctionHistory(address?: string) {
     variables: { address: address || "" },
     skip: !address || address.trim() === "",
     notifyOnNetworkStatusChange: true,
+    pollInterval: 2500, // Poll every 2.5 seconds
   });
 }
 
@@ -115,6 +116,6 @@ export function useRecentCancellations(
       orderBy: orderBy || defaultOrderBy,
     },
     notifyOnNetworkStatusChange: true,
-    pollInterval: 5000, // Poll every 5 seconds
+    pollInterval: 2500, // Poll every 2.5 seconds
   });
 }
