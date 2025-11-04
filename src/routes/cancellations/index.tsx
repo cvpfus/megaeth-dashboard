@@ -12,6 +12,11 @@ import {
 import { XCircle, TrendingUp, Percent, Clock } from "lucide-react";
 import { useMemo } from "react";
 
+export const Route = createFileRoute("/cancellations/")({
+  component: CancellationsPage,
+  ssr: "data-only",
+});
+
 export function CancellationsPage() {
   const {
     data: saleData,
@@ -98,6 +103,26 @@ export function CancellationsPage() {
     return (Number(stats.totalCancellations) / Number(stats.totalBids)) * 100;
   }, [stats]);
 
+  // Calculate cancelled amount percentage
+  const cancelledAmountPercentage = useMemo(() => {
+    if (!stats?.totalBidsUSDT || !stats?.totalCancellationsUSDT) return 0;
+    return (
+      (Number(stats.totalCancellationsUSDT) / Number(stats.totalBidsUSDT)) * 100
+    );
+  }, [stats]);
+
+  // Calculate active bids USDT
+  const activeBidsUSDT = useMemo(() => {
+    if (!stats?.totalBidsUSDT || !stats?.totalCancellationsUSDT) return 0;
+    return Number(stats.totalBidsUSDT) - Number(stats.totalCancellationsUSDT);
+  }, [stats]);
+
+  // Calculate active amount percentage
+  const activeAmountPercentage = useMemo(() => {
+    if (!stats?.totalBidsUSDT) return 0;
+    return (activeBidsUSDT / Number(stats.totalBidsUSDT)) * 100;
+  }, [stats, activeBidsUSDT]);
+
   if (saleError) {
     return (
       <div className="min-h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -134,7 +159,7 @@ export function CancellationsPage() {
 
       {/* Dashboard Content */}
       <section className="py-8 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Total Cancellations Card */}
           <Card
             className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-red-500/50 transition-colors duration-300 ${saleLoading ? "shadow-lg shadow-red-500/50 border-red-500" : ""}`}
@@ -254,6 +279,87 @@ export function CancellationsPage() {
             </CardContent>
           </Card>
 
+          {/* Active Bids USDT Card */}
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-green-500/50 transition-colors duration-300 ${saleLoading ? "shadow-lg shadow-green-500/50 border-green-500" : ""}`}
+          >
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-500/10 rounded-lg">
+                  <img
+                    src="https://tether.to/images/logoCircle.svg"
+                    alt="USDT"
+                    className="w-6 h-6"
+                  />
+                </div>
+                <div>
+                  <CardTitle className="text-white text-xl">
+                    Active Bids USDT
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Non-cancelled USDT value
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-3xl font-bold text-green-400">
+                    {formatUSDT(activeBidsUSDT)}
+                  </p>
+                  <p className="text-sm text-gray-500">Active value</p>
+                </div>
+                <div className="pt-3 border-t border-slate-700">
+                  <p className="text-2xl font-semibold text-white">
+                    {activeAmountPercentage.toFixed(1)}%
+                  </p>
+                  <p className="text-sm text-gray-500">Active rate</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Cancelled Amount Rate Card */}
+          <Card
+            className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-yellow-500/50 transition-colors duration-300 ${saleLoading ? "shadow-lg shadow-yellow-500/50 border-yellow-500" : ""}`}
+          >
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-yellow-500/10 rounded-lg">
+                  <Percent className="w-6 h-6 text-yellow-400" />
+                </div>
+                <div>
+                  <CardTitle className="text-white text-xl">
+                    Cancelled Amount Rate
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Percentage of USDT cancelled
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-3xl font-bold text-yellow-400">
+                    {cancelledAmountPercentage.toFixed(1)}%
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    of {formatUSDT(stats?.totalBidsUSDT)} total value
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-700">
+                  <p className="text-lg text-gray-400">
+                    {formatUSDT(stats?.totalCancellationsUSDT)} out of{" "}
+                    {formatUSDT(stats?.totalBidsUSDT)}
+                  </p>
+                  <p className="text-sm text-gray-500">Cancelled vs total</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Recent Cancellations Card */}
           <Card
             className={`bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-colors duration-300 ${recentCancellationsLoading ? "shadow-lg shadow-purple-500/50 border-purple-500" : ""}`}
@@ -313,8 +419,3 @@ export function CancellationsPage() {
     </div>
   );
 }
-
-export const Route = createFileRoute("/cancellations/")({
-  component: CancellationsPage,
-  ssr: "data-only",
-});
