@@ -20,14 +20,47 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
+// EVM address validation pattern (0x followed by 40 hexadecimal characters)
+const EVM_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+
+// EVM address validation function
+const isValidEvmAddress = (address: string): boolean => {
+  return EVM_ADDRESS_REGEX.test(address);
+};
+
 export const Route = createFileRoute("/allocation-checker/")({
   component: RouteComponent,
   ssr: "data-only",
+  validateSearch: (search) => {
+    // Handle empty search object or invalid address
+    if (
+      !search ||
+      typeof search.address !== "string" ||
+      search.address.trim() === ""
+    ) {
+      return { address: undefined };
+    }
+
+    // Validate EVM address format
+    const trimmedAddress = search.address.trim();
+    if (!isValidEvmAddress(trimmedAddress)) {
+      return { address: undefined };
+    }
+
+    // Only return address if it's a valid EVM address
+    return {
+      address: trimmedAddress,
+    };
+  },
 });
 
 function RouteComponent() {
-  const [address, setAddress] = useState("");
-  const [searchAddress, setSearchAddress] = useState("");
+  const navigate = Route.useNavigate();
+  const searchParams = Route.useSearch();
+
+  const [address, setAddress] = useState(searchParams.address || "");
+  const [addressError, setAddressError] = useState("");
+  const searchAddress = searchParams.address || "";
   const { data, loading, error } = useUserAuctionHistory(searchAddress);
 
   const auctionHistory = data?.AuctionHistory || [];
@@ -55,15 +88,59 @@ function RouteComponent() {
     0
   );
 
-  const handleSearch = () => {
-    if (address.trim()) {
-      setSearchAddress(address.trim());
+  const validateAddressInput = (inputAddress: string): string => {
+    if (!inputAddress.trim()) {
+      return "";
     }
+
+    if (!inputAddress.startsWith("0x")) {
+      return "Address must start with '0x'";
+    }
+
+    if (inputAddress.length !== 42) {
+      return "Address must be 42 characters long (0x + 40 hex chars)";
+    }
+
+    if (!/^0x[a-fA-F0-9]{40}$/.test(inputAddress)) {
+      return "Address must contain only valid hexadecimal characters";
+    }
+
+    return "";
+  };
+
+  const handleSearch = () => {
+    const trimmedAddress = address.trim();
+
+    // Validate address format
+    const validationError = validateAddressInput(trimmedAddress);
+    if (validationError) {
+      setAddressError(validationError);
+      return;
+    }
+
+    // Clear any previous errors
+    setAddressError("");
+
+    // Update URL with the address parameter using navigate
+    navigate({
+      to: "/allocation-checker",
+      search: { address: trimmedAddress },
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleSearch();
+    }
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setAddress(newAddress);
+
+    // Clear error when user starts typing
+    if (addressError) {
+      setAddressError("");
     }
   };
 
@@ -114,16 +191,21 @@ function RouteComponent() {
               <div className="flex-1 relative">
                 <Input
                   type="text"
-                  placeholder="0x..."
+                  placeholder="0x1234... (EVM address)"
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={handleAddressChange}
                   onKeyDown={handleKeyPress}
-                  className="pl-4 bg-slate-900 border-slate-600 text-gray-300 placeholder:text-gray-500 focus:border-cyan-500"
+                  className={`pl-4 bg-slate-900 border-slate-600 text-gray-300 placeholder:text-gray-500 focus:border-cyan-500 ${
+                    addressError ? "border-red-500 focus:border-red-400" : ""
+                  }`}
                 />
+                {addressError && (
+                  <p className="text-red-400 text-xs mt-1">{addressError}</p>
+                )}
               </div>
               <Button
                 onClick={handleSearch}
-                disabled={!address.trim() || loading}
+                disabled={!isValidEvmAddress(address.trim()) || loading}
                 className="bg-cyan-500 hover:bg-cyan-600 text-white border-none"
               >
                 <Search className="w-4 h-4 mr-2" />
@@ -313,7 +395,7 @@ function RouteComponent() {
                                     ? "Cancelled & Refunded"
                                     : auction.status === "PartiallyRefunded"
                                       ? "Partially Refunded"
-                                      : auction.status
+                                      : auction.status === "Bidding" ? "Bid Placed" : auction.status
                                           .replace(/([A-Z])/g, " $1")
                                           .trim()}
                                 </Badge>

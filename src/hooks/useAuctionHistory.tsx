@@ -74,7 +74,6 @@ export function useUserAuctionHistory(address?: string) {
     variables: { address: address || "" },
     skip: !address || address.trim() === "",
     notifyOnNetworkStatusChange: true,
-    pollInterval: 2500, // Poll every 2.5 seconds
   });
 }
 

@@ -195,6 +195,11 @@ function App() {
     if (status === Status.CancelledAndRefunded) {
       return "Cancelled & Refunded";
     }
+
+    if (status === Status.Bidding) {
+      return "Bid Placed";
+    }
+
     // Add spaces before capital letters for better readability
     return status.replace(/([A-Z])/g, " $1").trim();
   };
@@ -626,7 +631,7 @@ function App() {
                           value={Status.Bidding}
                           className="text-gray-300 focus:bg-slate-700 focus:text-white"
                         >
-                          Bidding
+                          Bid Placed
                         </SelectItem>
                         <SelectItem
                           value={Status.CancelledAndRefunded}
