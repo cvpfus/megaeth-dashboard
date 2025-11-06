@@ -4,6 +4,7 @@ interface AllocationResponse {
   clearing_price: string;
   token_allocation: string;
   usdt_allocation: string;
+  error?: string;
 }
 
 export function useAllocation(entityId?: string) {
@@ -15,7 +16,7 @@ export function useAllocation(entityId?: string) {
       }
 
       const response = await fetch(
-        `https://token-api.megaeth.com/api/allocation?entityId=${entityId}`
+        `/api/megaeth?entityId=${entityId}`
       );
 
       if (!response.ok) {
@@ -24,7 +25,7 @@ export function useAllocation(entityId?: string) {
 
       const data = await response.json();
 
-      // Check if the API returned an error in the response body
+      // Check if our proxy API returned an error
       if (data.error) {
         throw new Error(data.error);
       }

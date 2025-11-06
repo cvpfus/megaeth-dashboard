@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CancellationsIndexRouteImport } from './routes/cancellations/index'
 import { Route as AllocationCheckerIndexRouteImport } from './routes/allocation-checker/index'
+import { Route as ApiMegaethRouteImport } from './routes/api/megaeth'
 import { Route as ApiGraphqlRouteImport } from './routes/api/graphql'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const AllocationCheckerIndexRoute = AllocationCheckerIndexRouteImport.update({
   path: '/allocation-checker/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMegaethRoute = ApiMegaethRouteImport.update({
+  id: '/api/megaeth',
+  path: '/api/megaeth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
   id: '/api/graphql',
   path: '/api/graphql',
@@ -38,12 +44,14 @@ const ApiGraphqlRoute = ApiGraphqlRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/api/megaeth': typeof ApiMegaethRoute
   '/allocation-checker': typeof AllocationCheckerIndexRoute
   '/cancellations': typeof CancellationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/api/megaeth': typeof ApiMegaethRoute
   '/allocation-checker': typeof AllocationCheckerIndexRoute
   '/cancellations': typeof CancellationsIndexRoute
 }
@@ -51,18 +59,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/graphql': typeof ApiGraphqlRoute
+  '/api/megaeth': typeof ApiMegaethRoute
   '/allocation-checker/': typeof AllocationCheckerIndexRoute
   '/cancellations/': typeof CancellationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/graphql' | '/allocation-checker' | '/cancellations'
+  fullPaths:
+    | '/'
+    | '/api/graphql'
+    | '/api/megaeth'
+    | '/allocation-checker'
+    | '/cancellations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/graphql' | '/allocation-checker' | '/cancellations'
+  to:
+    | '/'
+    | '/api/graphql'
+    | '/api/megaeth'
+    | '/allocation-checker'
+    | '/cancellations'
   id:
     | '__root__'
     | '/'
     | '/api/graphql'
+    | '/api/megaeth'
     | '/allocation-checker/'
     | '/cancellations/'
   fileRoutesById: FileRoutesById
@@ -70,6 +90,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiGraphqlRoute: typeof ApiGraphqlRoute
+  ApiMegaethRoute: typeof ApiMegaethRoute
   AllocationCheckerIndexRoute: typeof AllocationCheckerIndexRoute
   CancellationsIndexRoute: typeof CancellationsIndexRoute
 }
@@ -97,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AllocationCheckerIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/megaeth': {
+      id: '/api/megaeth'
+      path: '/api/megaeth'
+      fullPath: '/api/megaeth'
+      preLoaderRoute: typeof ApiMegaethRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/graphql': {
       id: '/api/graphql'
       path: '/api/graphql'
@@ -110,6 +138,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiGraphqlRoute: ApiGraphqlRoute,
+  ApiMegaethRoute: ApiMegaethRoute,
   AllocationCheckerIndexRoute: AllocationCheckerIndexRoute,
   CancellationsIndexRoute: CancellationsIndexRoute,
 }
