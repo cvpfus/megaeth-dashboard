@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useUserAuctionHistory } from "@/hooks/useAuctionHistory";
+import { useAllocation } from "@/hooks/useAllocation";
 import { useState } from "react";
+import { Copy, Check } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import {
   Card,
@@ -11,14 +13,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  TrendingUp,
-  RotateCcw,
-  CheckCircle,
-  Search,
-  ArrowLeft,
-} from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TrendingUp, CheckCircle, Search, ArrowLeft } from "lucide-react";
 
 // EVM address validation pattern (0x followed by 40 hexadecimal characters)
 const EVM_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -60,33 +56,23 @@ function RouteComponent() {
 
   const [address, setAddress] = useState(searchParams.address || "");
   const [addressError, setAddressError] = useState("");
+  const [copied, setCopied] = useState(false);
   const searchAddress = searchParams.address || "";
   const { data, loading, error } = useUserAuctionHistory(searchAddress);
 
   const auctionHistory = data?.AuctionHistory || [];
 
-  // Separate by status
-  const acceptedBids = auctionHistory.filter(
-    (auction) => auction.status === "Allocated"
-  );
-  const refundedBids = auctionHistory.filter(
-    (auction) =>
-      auction.status === "CancelledAndRefunded" ||
-      auction.status === "PartiallyRefunded" ||
-      auction.status === "Refunded"
-  );
-  const lastBid = auctionHistory
-    .filter((auction) => auction.status === "Bidding")
-    ?.at(-1);
+  // Get entityID from the most recent bid that has an entityID, then take first 34 chars
+  const rawEntityId = auctionHistory.find(
+    (auction) => auction.entityID
+  )?.entityID;
+  const entityId = rawEntityId ? rawEntityId.slice(0, 34) : undefined;
 
-  const totalAcceptedAmount = acceptedBids.reduce(
-    (sum, auction) => sum + (Number(auction.amount) || 0),
-    0
-  );
-  const totalRefundedAmount = refundedBids.reduce(
-    (sum, auction) => sum + (Number(auction.amount) || 0),
-    0
-  );
+  const {
+    data: allocationData,
+    isLoading: allocationLoading,
+    error: allocationError,
+  } = useAllocation(entityId);
 
   const validateAddressInput = (inputAddress: string): string => {
     if (!inputAddress.trim()) {
@@ -147,6 +133,25 @@ function RouteComponent() {
   const formatNumber = (num: number) => {
     if (num === undefined || num === null) return "0";
     return new Intl.NumberFormat("en-US").format(num);
+  };
+
+  const copyToClipboard = async () => {
+    const tipAddress = "0xd421ba69d5Cc6f89D95c528217Def05ed440657E";
+    try {
+      await navigator.clipboard.writeText(tipAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = tipAddress;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -219,20 +224,20 @@ function RouteComponent() {
       {/* Stats Section */}
       {searchAddress && (
         <section className="py-8 px-6 max-w-7xl mx-auto">
-          {loading ? (
+          {loading || allocationLoading ? (
             <div className="text-center py-8 text-gray-400">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400 mx-auto mb-4"></div>
               Loading allocation data...
             </div>
           ) : error ? (
             <div className="text-center py-8 text-red-400">
-              Error loading data: {error.message}
+              Error loading auction history: {error.message}
             </div>
           ) : (
             <>
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {/* Last Bid Card */}
+              {/* Allocation Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {/* Token Allocation Card */}
                 <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-cyan-500/50 transition-all duration-300">
                   <CardHeader>
                     <div className="flex items-center gap-3">
@@ -241,32 +246,44 @@ function RouteComponent() {
                       </div>
                       <div>
                         <CardTitle className="text-white text-xl">
-                          Last Bid
+                          Token Allocation
                         </CardTitle>
                         <CardDescription className="text-gray-400">
-                          Your most recent bid
+                          Your allocated tokens
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {lastBid ? (
+                      {allocationError ? (
                         <div>
-                          <p className="text-3xl font-bold text-cyan-400">
-                            {formatNumber(Number(lastBid.amount))} USDT
+                          <p className="text-lg font-medium text-red-400">
+                            Error loading allocation
                           </p>
                           <p className="text-sm text-gray-500">
-                            Last bid amount
+                            You might not get an allocation
+                          </p>
+                        </div>
+                      ) : allocationData ? (
+                        <div>
+                          <p className="text-3xl font-bold text-cyan-400">
+                            {formatNumber(
+                              Number(allocationData.token_allocation)
+                            )}{" "}
+                            MEGA
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Token allocation
                           </p>
                         </div>
                       ) : (
                         <div>
                           <p className="text-3xl font-bold text-gray-500">
-                            No bids
+                            No allocation
                           </p>
                           <p className="text-sm text-gray-500">
-                            No recent bids found
+                            No allocation data found
                           </p>
                         </div>
                       )}
@@ -274,7 +291,7 @@ function RouteComponent() {
                   </CardContent>
                 </Card>
 
-                {/* Accepted Amount Card */}
+                {/* USDT Allocation Card */}
                 <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-green-500/50 transition-all duration-300">
                   <CardHeader>
                     <div className="flex items-center gap-3">
@@ -283,155 +300,70 @@ function RouteComponent() {
                       </div>
                       <div>
                         <CardTitle className="text-white text-xl">
-                          Accepted Amount
+                          USDT Allocation
                         </CardTitle>
                         <CardDescription className="text-gray-400">
-                          Successfully allocated
+                          Your USDT allocation
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div>
-                        <p className="text-3xl font-bold text-green-400">
-                          {formatNumber(totalAcceptedAmount)} USDT
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Allocated amount
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Refunds Card */}
-                <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-purple-500/50 transition-all duration-300">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-purple-500/10 rounded-lg">
-                        <RotateCcw className="w-6 h-6 text-purple-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-white text-xl">
-                          Refunded Amount
-                        </CardTitle>
-                        <CardDescription className="text-gray-400">
-                          Your refunded amount
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="text-3xl font-bold text-purple-400">
-                          {formatNumber(totalRefundedAmount)} USDT
-                        </p>
-                        <p className="text-sm text-gray-500">Refunded amount</p>
-                      </div>
+                      {allocationError ? (
+                        <div>
+                          <p className="text-lg font-medium text-red-400">
+                            Error loading allocation
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            You might not get an allocation
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-3xl font-bold text-green-400">
+                            {allocationData
+                              ? formatNumber(
+                                  Number(allocationData.usdt_allocation)
+                                )
+                              : "0"}{" "}
+                            USDT
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            USDT allocation amount
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Transaction History */}
-              <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700">
-                <CardHeader>
-                  <CardTitle className="text-white">
-                    Transaction History
-                  </CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Your complete transaction history
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {auctionHistory.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">
-                      No transactions found for this address
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {auctionHistory.map((auction: any) => (
-                        <div
-                          key={auction.id}
-                          className="flex items-center justify-between p-4 bg-slate-900/50 rounded-lg border border-slate-700"
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className="text-sm">
-                              <div className="text-gray-400">Amount</div>
-                              <div className="text-white font-semibold">
-                                {formatNumber(auction.amount)} USDT
-                              </div>
-                            </div>
-                            <div className="text-sm">
-                              <div className="text-gray-400">Status</div>
-                              <div className="flex items-center gap-2">
-                                <Badge
-                                  variant={
-                                    auction.status === "Allocated"
-                                      ? "default"
-                                      : auction.status ===
-                                            "CancelledAndRefunded" ||
-                                          auction.status ===
-                                            "PartiallyRefunded" ||
-                                          auction.status === "Refunded"
-                                        ? "secondary"
-                                        : "outline"
-                                  }
-                                  className={
-                                    auction.status === "Allocated"
-                                      ? "bg-green-500/20 text-green-400 border-green-500/50"
-                                      : auction.status ===
-                                            "CancelledAndRefunded" ||
-                                          auction.status ===
-                                            "PartiallyRefunded" ||
-                                          auction.status === "Refunded"
-                                        ? "bg-purple-500/20 text-purple-400 border-purple-500/50"
-                                        : "bg-blue-500/20 text-blue-400 border-blue-500/50"
-                                  }
-                                >
-                                  {auction.status === "CancelledAndRefunded"
-                                    ? "Cancelled & Refunded"
-                                    : auction.status === "PartiallyRefunded"
-                                      ? "Partially Refunded"
-                                      : auction.status === "Bidding" ? "Bid Placed" : auction.status
-                                          .replace(/([A-Z])/g, " $1")
-                                          .trim()}
-                                </Badge>
-                                {auction.status === "Bidding" && (
-                                  <Badge
-                                    variant="outline"
-                                    className="bg-orange-500/20 text-orange-400 border-orange-500/50 text-xs"
-                                  >
-                                    Lockup: {auction.lockup ? "Yes" : "No"}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right text-sm">
-                            <div className="text-gray-400">Transaction</div>
-                            {auction.txHash ? (
-                              <a
-                                href={`https://etherscan.io/tx/${auction.txHash}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-cyan-400 hover:text-cyan-300 transition-colors"
-                              >
-                                {auction.txHash.slice(0, 10)}...
-                                {auction.txHash.slice(-8)}
-                              </a>
-                            ) : (
-                              <span className="text-gray-500">-</span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+              {/* Tip Alert */}
+              <Alert className="mt-8 bg-cyan-500/10 border-cyan-500/20">
+                <AlertTitle className="text-cyan-400">Hey!</AlertTitle>
+                <AlertDescription className="text-gray-300">
+                  Got an allocation? Spare a tip for the unlucky ones, I got
+                  none haha
+                  <br />
+                  <button
+                    onClick={copyToClipboard}
+                    className="bg-slate-800 px-2 py-1 rounded text-sm text-cyan-400 mt-2 flex items-center gap-2 hover:bg-slate-700 transition-colors cursor-pointer group"
+                  >
+                    <span>0xd421ba69d5Cc6f89D95c528217Def05ed440657E</span>
+                    {copied ? (
+                      <Check className="w-3 h-3 text-green-400" />
+                    ) : (
+                      <Copy className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </button>
+                  {copied && (
+                    <p className="text-xs text-green-400 mt-1">
+                      Copied to clipboard!
+                    </p>
                   )}
-                </CardContent>
-              </Card>
+                </AlertDescription>
+              </Alert>
             </>
           )}
         </section>
