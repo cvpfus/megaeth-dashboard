@@ -24,6 +24,6 @@ export function useSaleStats() {
   return useQuery(GET_SALE_STATS, {
     variables: { id: "ifyoureadthisyouareawesome" },
     notifyOnNetworkStatusChange: true, // Allow loading state updates during polling
-    pollInterval: 2500, // Poll every 2.5 seconds
+    pollInterval: 500, // Poll every 0.5 seconds
   });
 }

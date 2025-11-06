@@ -47,7 +47,7 @@ export function useAuctionHistory(
       where,
     },
     notifyOnNetworkStatusChange: true, // Allow loading state updates during polling
-    pollInterval: 2500, // Poll every 2.5 seconds
+    pollInterval: 500, // Poll every 0.5 seconds
   });
 }
 
@@ -115,6 +115,6 @@ export function useRecentCancellations(
       orderBy: orderBy || defaultOrderBy,
     },
     notifyOnNetworkStatusChange: true,
-    pollInterval: 2500, // Poll every 2.5 seconds
+    pollInterval: 500, // Poll every 0.5 seconds
   });
 }
